@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<script async src="https://telegram.org/js/telegram-web-app.js" onload="try{var w=Telegram.WebApp;w.ready();w.expand();document.documentElement.classList.add('in-tg')}catch(e){}"></script>
+<!--arlo-license--><!-- © 2026 Calm Noise. All rights reserved. Proprietary license: copying, modification and redistribution without the owner's written permission are prohibited. See LICENSE.txt. Owner fingerprint 75F47EA38ECFDEB4. -->
+<meta name="copyright" content="© 2026 Calm Noise. All rights reserved."><!--/arlo-license-->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#06070b">
+<title>Calm Noise — Sleep Sounds Mixer</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3Cmask id='m'%3E%3Crect width='512' height='512' fill='%23fff'/%3E%3Ccircle cx='300' cy='214' r='104' fill='%23000'/%3E%3C/mask%3E%3C/defs%3E%3Crect width='512' height='512' rx='112' fill='%230c1020'/%3E%3Ccircle cx='256' cy='256' r='196' fill='none' stroke='%239ad8c8' stroke-opacity='.22' stroke-width='14'/%3E%3Ccircle cx='256' cy='256' r='150' fill='none' stroke='%239ad8c8' stroke-opacity='.5' stroke-width='14'/%3E%3Ccircle cx='256' cy='256' r='112' fill='%23f2c38b' mask='url(%23m)'/%3E%3C/svg%3E">
+<style>
+:root,[data-theme=dark]{--bg:#06070b;--bg2:#0e1119;--card:#11141e;--line:#1e2433;--ink:#e8e4da;--mute:#878c9f;--acc:#9ad8c8;--warm:#f2c38b;--accInk:#062019;--sel:rgba(154,216,200,.08);--pupil:rgba(6,7,11,.74);--dan:#c4554d}
+[data-theme=light]{--bg:#f3efe6;--bg2:#ebe5d8;--card:#fffdf8;--line:#e2dacb;--ink:#1c2030;--mute:#6b6e7c;--acc:#2d7a6c;--warm:#c47a2c;--accInk:#ffffff;--sel:rgba(45,122,108,.08);--pupil:rgba(255,253,248,.8);--dan:#b5463f}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--ink);overflow-x:hidden}
+body{font:15px/1.4 ui-rounded,"SF Pro Rounded",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;-webkit-tap-highlight-color:transparent;-webkit-font-smoothing:antialiased;transition:background .3s}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none;touch-action:manipulation}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.i{fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.i.f{fill:currentColor;stroke:none}
+.app{max-width:520px;margin:0 auto;padding:calc(env(safe-area-inset-top) + 6px) calc(env(safe-area-inset-right) + 16px) calc(env(safe-area-inset-bottom) + 28px) calc(env(safe-area-inset-left) + 16px)}
+.top{display:flex;align-items:center;gap:8px;height:56px}
+.brand{flex:1;display:flex;align-items:center;gap:10px;font-weight:650;font-size:18px;letter-spacing:.01em;min-width:0}
+.brand svg{width:30px;height:30px;flex:none}
+.ib{width:44px;height:44px;border-radius:14px;border:1px solid var(--line);background:var(--card);display:grid;place-items:center}
+.ib .i{width:22px;height:22px}
+.hero{position:relative;height:min(72vw,300px);min-height:236px;display:grid;place-items:center}
+#orb{position:absolute;inset:0;width:100%;height:100%}
+.play{position:relative;width:84px;height:84px;border-radius:50%;background:var(--pupil);display:grid;place-items:center;transition:transform .2s}
+.play:active{transform:scale(.93)}
+.play .i{width:34px;height:34px}
+.status{position:absolute;bottom:2px;left:0;right:0;text-align:center;color:var(--mute);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sec{margin-top:18px}
+.row-h{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;min-height:24px}
+h2{font-size:12px;font-weight:650;letter-spacing:.09em;text-transform:uppercase;color:var(--mute)}
+.tleft{font-variant-numeric:tabular-nums;color:var(--warm);font-size:13px;font-weight:650;text-align:right}
+.chips{display:flex;gap:6px}
+.chip{flex:1;min-height:44px;border-radius:14px;background:var(--card);border:1px solid var(--line);font-weight:650;font-size:14px;padding:0 6px;white-space:nowrap;transition:background .2s,color .2s}
+.chip[aria-pressed=true]{background:var(--acc);color:var(--accInk);border-color:transparent}
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:12px 12px 12px 14px}
+.card .row-h{margin-bottom:4px}
+.ghost{min-height:44px;padding:0 12px;border-radius:14px;display:flex;align-items:center;gap:6px;font-weight:650;font-size:14px;color:var(--acc)}
+.ghost .i{width:20px;height:20px}
+.layer{display:flex;align-items:center;gap:10px;min-height:56px}
+.li{width:40px;height:40px;border-radius:12px;background:var(--bg2);display:grid;place-items:center;color:var(--acc);flex:none}
+.li .i{width:22px;height:22px}
+.lm{flex:1;min-width:0}
+.ln{font-size:14px;font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.x{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;color:var(--mute);flex:none}
+.x .i{width:20px;height:20px}
+.hint{color:var(--mute);font-size:13px;padding:4px 0 2px}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:28px;background:transparent;display:block;--p:70%}
+input[type=range]::-webkit-slider-runnable-track{height:6px;border-radius:3px;background:linear-gradient(var(--acc),var(--acc)) 0/var(--p) 100% no-repeat,var(--line)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:var(--ink);margin-top:-9px;border:0}
+input[type=range]::-moz-range-track{height:6px;border-radius:3px;background:var(--line)}
+input[type=range]::-moz-range-progress{height:6px;border-radius:3px;background:var(--acc)}
+input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:var(--ink);border:0}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.tile{min-height:92px;border-radius:18px;background:var(--card);border:1px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:10px 4px;font-size:13px;font-weight:650;text-align:center;line-height:1.2;transition:background .2s,border-color .2s,transform .15s;min-width:0;overflow-wrap:anywhere}
+.tile .i{width:28px;height:28px;color:var(--mute);transition:color .2s}
+.tile[aria-pressed=true]{border-color:var(--acc);background:var(--sel)}
+.tile[aria-pressed=true] .i{color:var(--acc)}
+.tile:active,.chip:active,.fm:active{transform:scale(.96)}
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.preset{display:flex;align-items:center;gap:8px;min-height:52px;border-radius:16px;background:var(--card);border:1px solid var(--line);padding:6px 12px;text-align:left;font-size:14px;font-weight:650;line-height:1.2;transition:transform .15s;min-width:0}
+.preset .ics{display:flex;color:var(--warm)}
+.preset .ics .i{width:18px;height:18px;margin-right:-3px}
+.fav{display:flex;align-items:center;gap:4px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:4px;margin-bottom:8px}
+.fm{flex:1;min-width:0;min-height:52px;text-align:left;padding:6px 10px;display:flex;flex-direction:column;justify-content:center;gap:3px;border-radius:14px;transition:transform .15s}
+.fn{font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fs{display:flex;align-items:center;gap:6px;color:var(--mute);font-size:12px}
+.fs .i{width:16px;height:16px;color:var(--acc)}
+.empty{color:var(--mute);font-size:14px;padding:16px;border:1px dashed var(--line);border-radius:18px;text-align:center}
+.foot{margin-top:26px;color:var(--mute);font-size:12px;text-align:center;opacity:.8}
+.back{position:fixed;inset:0;background:rgba(0,0,0,.55);opacity:0;visibility:hidden;transition:opacity .25s,visibility 0s .25s;z-index:20}
+.back.on{opacity:1;visibility:visible;transition:opacity .25s}
+.sheet{position:fixed;left:0;right:0;bottom:0;margin:0 auto;max-width:520px;max-height:88vh;overflow-y:auto;background:var(--card);border-radius:26px 26px 0 0;padding:22px calc(env(safe-area-inset-right) + 20px) calc(env(safe-area-inset-bottom) + 20px) calc(env(safe-area-inset-left) + 20px);transform:translateY(105%);visibility:hidden;transition:transform .28s cubic-bezier(.2,.8,.2,1),visibility 0s .28s;z-index:21}
+.sheet.on{transform:none;visibility:visible;transition:transform .28s cubic-bezier(.2,.8,.2,1)}
+.sheet h3{font-size:19px;margin-bottom:6px}
+.sheet p{color:var(--mute)}
+.btns{display:flex;gap:10px;margin-top:18px}
+.btn{flex:1;min-height:48px;border-radius:16px;font-weight:650;background:var(--bg2)}
+.btn.pri{background:var(--acc);color:var(--accInk)}
+.btn.dan{background:var(--dan);color:#fff}
+.txt{width:100%;min-height:48px;margin-top:12px;border-radius:14px;border:1px solid var(--line);background:var(--bg2);color:var(--ink);padding:0 14px;font:inherit;font-size:16px}
+.srow{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px 12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.srow>span{font-weight:600}
+.seg{display:flex;background:var(--bg2);border-radius:14px;padding:3px}
+.seg button{min-height:44px;padding:0 12px;border-radius:11px;font-size:14px;font-weight:650;color:var(--mute)}
+.seg button[aria-pressed=true]{background:var(--card);color:var(--ink)}
+select{min-height:44px;border-radius:12px;background:var(--bg2);color:var(--ink);border:1px solid var(--line);padding:0 10px;font:inherit;max-width:100%}
+.sw{width:60px;height:44px;position:relative;flex:none}
+.sw::before{content:"";position:absolute;left:4px;right:4px;top:10px;height:24px;border-radius:12px;background:var(--line);transition:background .2s}
+.sw::after{content:"";position:absolute;top:13px;left:7px;width:18px;height:18px;border-radius:50%;background:#fff;transition:transform .2s}
+.sw[aria-pressed=true]::before{background:var(--acc)}
+.sw[aria-pressed=true]::after{transform:translateX(28px)}
+.sml{font-size:12px;color:var(--mute);margin-top:14px}
+#night{position:fixed;inset:0;background:#000;z-index:30;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;opacity:0;visibility:hidden;transition:opacity .3s,visibility 0s .3s;cursor:pointer}
+#night.on{opacity:1;visibility:visible;transition:opacity .3s}
+.clock{font-size:64px;font-weight:200;color:#2c2f37;font-variant-numeric:tabular-nums;letter-spacing:.02em}
+.ntimer{color:#3b3527;font-size:15px;min-height:20px;font-variant-numeric:tabular-nums}
+.ndot{width:14px;height:14px;border-radius:50%;background:#1d3a34}
+.nhint{position:absolute;bottom:calc(env(safe-area-inset-bottom) + 34px);color:#2c2f35;font-size:13px;transition:opacity .3s}
+.toast{position:fixed;left:16px;right:16px;bottom:calc(env(safe-area-inset-bottom) + 24px);margin:0 auto;max-width:420px;width:max-content;background:var(--ink);color:var(--bg);padding:12px 18px;border-radius:14px;font-size:14px;text-align:center;opacity:0;transform:translateY(16px);transition:opacity .25s,transform .25s;z-index:40;pointer-events:none}
+.toast.on{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="brand"><svg viewBox="0 0 512 512" aria-hidden="true"><defs><mask id="bm"><rect width="512" height="512" fill="#fff"/><circle cx="300" cy="214" r="104" fill="#000"/></mask></defs><circle cx="256" cy="256" r="196" fill="none" stroke="var(--acc)" stroke-opacity=".35" stroke-width="22"/><circle cx="256" cy="256" r="122" fill="var(--warm)" mask="url(#bm)"/></svg><span data-i="name"></span></div>
+    <button class="ib" id="nightBtn"></button>
+    <button class="ib" id="setBtn"></button>
+  </header>
+
+  <section class="hero">
+    <canvas id="orb"></canvas>
+    <button class="play" id="playBtn"></button>
+    <div class="status" id="status"></div>
+  </section>
+
+  <section class="sec">
+    <div class="row-h"><h2 data-i="timer"></h2><span class="tleft" id="tleft"></span></div>
+    <div class="chips" id="chips"></div>
+  </section>
+
+  <section class="sec card">
+    <div class="row-h"><h2 data-i="mixTitle"></h2><button class="ghost" id="saveBtn"></button></div>
+    <div id="layers"></div>
+    <p class="hint" id="hint"></p>
+  </section>
+
+  <section class="sec">
+    <div class="row-h"><h2 data-i="sounds"></h2></div>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <section class="sec">
+    <div class="row-h"><h2 data-i="presets"></h2></div>
+    <div class="pgrid" id="presets"></div>
+  </section>
+
+  <section class="sec">
+    <div class="row-h"><h2 data-i="favs"></h2></div>
+    <div id="favs"></div>
+  </section>
+
+  <p class="foot" data-i="privacy"></p>
+</div>
+
+<div class="back" id="back"></div>
+
+<div class="sheet" id="sh-settings" role="dialog" aria-modal="true">
+  <h3 data-i="settings"></h3>
+  <div class="srow"><span data-i="theme"></span><div class="seg" id="themeSeg"></div></div>
+  <div class="srow"><span data-i="lang"></span><select id="langSel"></select></div>
+  <div class="srow"><span data-i="autoDim"></span><button class="sw" id="dimSw"></button></div>
+  <p class="sml" data-i="privacy"></p>
+  <div class="btns"><button class="btn" data-close data-i="close"></button></div>
+</div>
+
+<div class="sheet" id="sh-save" role="dialog" aria-modal="true">
+  <h3 data-i="mixName"></h3>
+  <input class="txt" id="mixName" type="text" maxlength="40" autocomplete="off">
+  <div class="btns"><button class="btn" data-close data-i="cancel"></button><button class="btn pri" id="doSave" data-i="save"></button></div>
+</div>
+
+<div class="sheet" id="sh-confirm" role="dialog" aria-modal="true">
+  <h3 id="cfText"></h3>
+  <div class="btns"><button class="btn" data-close data-i="cancel"></button><button class="btn dan" id="cfYes" data-i="del"></button></div>
+</div>
+
+<div class="sheet" id="sh-rate" role="dialog" aria-modal="true">
+  <h3 data-i="rateT"></h3>
+  <p data-i="rateX"></p>
+  <div class="btns"><button class="btn" data-close data-i="rateN"></button><button class="btn pri" id="rateYes" data-i="rateY"></button></div>
+</div>
+
+<div id="night" role="button" tabindex="-1">
+  <div class="clock" id="clock"></div>
+  <div class="ndot" id="ndot"></div>
+  <div class="ntimer" id="ntimer"></div>
+  <div class="nhint" id="nhint"></div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<template id="app-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><defs><mask id="cm"><rect width="512" height="512" fill="#fff"/><circle cx="300" cy="214" r="104" fill="#000"/></mask></defs><rect width="512" height="512" rx="112" fill="#0c1020"/><circle cx="256" cy="256" r="196" fill="none" stroke="#9ad8c8" stroke-opacity=".22" stroke-width="14"/><circle cx="256" cy="256" r="150" fill="none" stroke="#9ad8c8" stroke-opacity=".5" stroke-width="14"/><circle cx="256" cy="256" r="112" fill="#f2c38b" mask="url(#cm)"/></svg></template>
+
+<script>
+"use strict";
+window.APP_AD = window.APP_AD || ((place) => {});
+
+const I18N = {
+  en:{name:"Calm Noise",play:"Play",pause:"Pause",timer:"Sleep timer",off:"Off",min:"min",stopsIn:"Stops in {t}",fading:"Fading out · {t}",mixTitle:"Your mix",hint:"Tap sounds below to blend up to 3.",empty:"Pick a sound to begin",sounds:"Sounds",presets:"Try a mix",saveMix:"Save",saved:"Mix saved",favs:"Saved mixes",noFavs:"Your saved mixes will appear here.",maxThree:"Up to 3 sounds — the first one was swapped out",mixName:"Name your mix",cancel:"Cancel",save:"Save",del:"Delete",delQ:"Delete “{n}”?",remove:"Remove",settings:"Settings",theme:"Theme",auto:"Auto",dark:"Dark",light:"Light",lang:"Language",autoDim:"Dim the screen while playing",night:"Night screen",wake:"Tap to wake",done:"Timer finished. Good night.",rateT:"Enjoying Calm Noise?",rateX:"A short rating helps other people find it.",rateY:"Rate",rateN:"Not now",privacy:"Everything stays on this device. No account, no tracking. Not medical advice.",close:"Close",
+    s:{rain:"Rain",waves:"Waves",stream:"Stream",thunder:"Thunder",wind:"Wind",fire:"Fire",fan:"Fan",train:"Train",crickets:"Crickets",white:"White noise",pink:"Pink noise",brown:"Brown noise"},p:["Rainy night","Seaside","Cabin fire","Night train"]},
+  es:{name:"Calm Noise",play:"Reproducir",pause:"Pausa",timer:"Temporizador",off:"No",min:"min",stopsIn:"Se detiene en {t}",fading:"Bajando volumen · {t}",mixTitle:"Tu mezcla",hint:"Toca sonidos para mezclar hasta 3.",empty:"Elige un sonido para empezar",sounds:"Sonidos",presets:"Prueba una mezcla",saveMix:"Guardar",saved:"Mezcla guardada",favs:"Mezclas guardadas",noFavs:"Tus mezclas guardadas aparecerán aquí.",maxThree:"Máximo 3 sonidos: se cambió el primero",mixName:"Ponle nombre a tu mezcla",cancel:"Cancelar",save:"Guardar",del:"Eliminar",delQ:"¿Eliminar «{n}»?",remove:"Quitar",settings:"Ajustes",theme:"Tema",auto:"Auto",dark:"Oscuro",light:"Claro",lang:"Idioma",autoDim:"Oscurecer la pantalla al reproducir",night:"Pantalla nocturna",wake:"Toca para despertar",done:"Temporizador terminado. Buenas noches.",rateT:"¿Te gusta Calm Noise?",rateX:"Una valoración rápida ayuda a otros a encontrarla.",rateY:"Valorar",rateN:"Ahora no",privacy:"Todo se queda en este dispositivo. Sin cuenta ni rastreo. No es consejo médico.",close:"Cerrar",
+    s:{rain:"Lluvia",waves:"Olas",stream:"Arroyo",thunder:"Truenos",wind:"Viento",fire:"Fuego",fan:"Ventilador",train:"Tren",crickets:"Grillos",white:"Ruido blanco",pink:"Ruido rosa",brown:"Ruido marrón"},p:["Noche de lluvia","Costa","Fuego en la cabaña","Tren nocturno"]},
+  pt:{name:"Calm Noise",play:"Reproduzir",pause:"Pausar",timer:"Timer de sono",off:"Desl.",min:"min",stopsIn:"Para em {t}",fading:"Diminuindo · {t}",mixTitle:"Sua mistura",hint:"Toque nos sons para misturar até 3.",empty:"Escolha um som para começar",sounds:"Sons",presets:"Experimente uma mistura",saveMix:"Salvar",saved:"Mistura salva",favs:"Misturas salvas",noFavs:"Suas misturas salvas aparecem aqui.",maxThree:"Até 3 sons — o primeiro foi trocado",mixName:"Dê um nome à mistura",cancel:"Cancelar",save:"Salvar",del:"Excluir",delQ:"Excluir “{n}”?",remove:"Remover",settings:"Ajustes",theme:"Tema",auto:"Auto",dark:"Escuro",light:"Claro",lang:"Idioma",autoDim:"Escurecer a tela durante a reprodução",night:"Tela noturna",wake:"Toque para reativar",done:"Timer concluído. Boa noite.",rateT:"Está gostando do Calm Noise?",rateX:"Uma avaliação rápida ajuda outras pessoas a encontrá-lo.",rateY:"Avaliar",rateN:"Agora não",privacy:"Tudo fica neste aparelho. Sem conta, sem rastreamento. Não é aconselhamento médico.",close:"Fechar",
+    s:{rain:"Chuva",waves:"Ondas",stream:"Riacho",thunder:"Trovões",wind:"Vento",fire:"Fogueira",fan:"Ventilador",train:"Trem",crickets:"Grilos",white:"Ruído branco",pink:"Ruído rosa",brown:"Ruído marrom"},p:["Noite de chuva","Beira-mar","Lareira na cabana","Trem noturno"]},
+  de:{name:"Calm Noise",play:"Abspielen",pause:"Pause",timer:"Schlaf-Timer",off:"Aus",min:"Min.",stopsIn:"Stoppt in {t}",fading:"Wird leiser · {t}",mixTitle:"Dein Mix",hint:"Tippe Klänge an, um bis zu 3 zu mischen.",empty:"Wähle einen Klang",sounds:"Klänge",presets:"Mix ausprobieren",saveMix:"Speichern",saved:"Mix gespeichert",favs:"Gespeicherte Mixe",noFavs:"Deine gespeicherten Mixe erscheinen hier.",maxThree:"Höchstens 3 Klänge – der erste wurde ersetzt",mixName:"Mix benennen",cancel:"Abbrechen",save:"Speichern",del:"Löschen",delQ:"„{n}“ löschen?",remove:"Entfernen",settings:"Einstellungen",theme:"Design",auto:"Auto",dark:"Dunkel",light:"Hell",lang:"Sprache",autoDim:"Bildschirm beim Abspielen abdunkeln",night:"Nachtbildschirm",wake:"Tippen zum Aufwecken",done:"Timer beendet. Gute Nacht.",rateT:"Gefällt dir Calm Noise?",rateX:"Eine kurze Bewertung hilft anderen, die App zu finden.",rateY:"Bewerten",rateN:"Später",privacy:"Alles bleibt auf diesem Gerät. Kein Konto, kein Tracking. Keine medizinische Beratung.",close:"Schließen",
+    s:{rain:"Regen",waves:"Wellen",stream:"Bach",thunder:"Donner",wind:"Wind",fire:"Feuer",fan:"Ventilator",train:"Zug",crickets:"Grillen",white:"Weißes Rauschen",pink:"Rosa Rauschen",brown:"Braunes Rauschen"},p:["Regennacht","Am Meer","Kaminfeuer","Nachtzug"]},
+  fr:{name:"Calm Noise",play:"Lecture",pause:"Pause",timer:"Minuteur",off:"Aucun",min:"min",stopsIn:"Arrêt dans {t}",fading:"Fondu · {t}",mixTitle:"Votre mélange",hint:"Touchez des sons pour en mélanger jusqu'à 3.",empty:"Choisissez un son pour commencer",sounds:"Sons",presets:"Essayez un mélange",saveMix:"Enregistrer",saved:"Mélange enregistré",favs:"Mélanges enregistrés",noFavs:"Vos mélanges enregistrés apparaîtront ici.",maxThree:"3 sons maximum — le premier a été remplacé",mixName:"Nommez votre mélange",cancel:"Annuler",save:"Enregistrer",del:"Supprimer",delQ:"Supprimer « {n} » ?",remove:"Retirer",settings:"Réglages",theme:"Thème",auto:"Auto",dark:"Sombre",light:"Clair",lang:"Langue",autoDim:"Assombrir l'écran pendant la lecture",night:"Écran de nuit",wake:"Touchez pour réveiller",done:"Minuteur terminé. Bonne nuit.",rateT:"Vous aimez Calm Noise ?",rateX:"Une note rapide aide d'autres personnes à la trouver.",rateY:"Noter",rateN:"Plus tard",privacy:"Tout reste sur cet appareil. Sans compte ni suivi. Ce n'est pas un avis médical.",close:"Fermer",
+    s:{rain:"Pluie",waves:"Vagues",stream:"Ruisseau",thunder:"Tonnerre",wind:"Vent",fire:"Feu",fan:"Ventilateur",train:"Train",crickets:"Grillons",white:"Bruit blanc",pink:"Bruit rose",brown:"Bruit brun"},p:["Nuit de pluie","Bord de mer","Feu de chalet","Train de nuit"]},
+  it:{name:"Calm Noise",play:"Riproduci",pause:"Pausa",timer:"Timer",off:"No",min:"min",stopsIn:"Si ferma tra {t}",fading:"Dissolvenza · {t}",mixTitle:"Il tuo mix",hint:"Tocca i suoni per mixarne fino a 3.",empty:"Scegli un suono per iniziare",sounds:"Suoni",presets:"Prova un mix",saveMix:"Salva",saved:"Mix salvato",favs:"Mix salvati",noFavs:"I tuoi mix salvati appariranno qui.",maxThree:"Massimo 3 suoni: il primo è stato sostituito",mixName:"Dai un nome al mix",cancel:"Annulla",save:"Salva",del:"Elimina",delQ:"Eliminare «{n}»?",remove:"Rimuovi",settings:"Impostazioni",theme:"Tema",auto:"Auto",dark:"Scuro",light:"Chiaro",lang:"Lingua",autoDim:"Oscura lo schermo durante la riproduzione",night:"Schermo notte",wake:"Tocca per riattivare",done:"Timer finito. Buonanotte.",rateT:"Ti piace Calm Noise?",rateX:"Una valutazione veloce aiuta altri a trovarla.",rateY:"Valuta",rateN:"Non ora",privacy:"Tutto resta su questo dispositivo. Nessun account, nessun tracciamento. Non è un consiglio medico.",close:"Chiudi",
+    s:{rain:"Pioggia",waves:"Onde",stream:"Ruscello",thunder:"Tuoni",wind:"Vento",fire:"Fuoco",fan:"Ventilatore",train:"Treno",crickets:"Grilli",white:"Rumore bianco",pink:"Rumore rosa",brown:"Rumore marrone"},p:["Notte di pioggia","Al mare","Fuoco nel rifugio","Treno notturno"]},
+  tr:{name:"Calm Noise",play:"Oynat",pause:"Duraklat",timer:"Uyku zamanlayıcı",off:"Kapalı",min:"dk",stopsIn:"{t} sonra durur",fading:"Ses azalıyor · {t}",mixTitle:"Karışımın",hint:"En fazla 3 sesi karıştırmak için dokun.",empty:"Başlamak için bir ses seç",sounds:"Sesler",presets:"Bir karışım dene",saveMix:"Kaydet",saved:"Karışım kaydedildi",favs:"Kayıtlı karışımlar",noFavs:"Kaydettiğin karışımlar burada görünecek.",maxThree:"En fazla 3 ses — ilki değiştirildi",mixName:"Karışıma ad ver",cancel:"İptal",save:"Kaydet",del:"Sil",delQ:"“{n}” silinsin mi?",remove:"Kaldır",settings:"Ayarlar",theme:"Tema",auto:"Otomatik",dark:"Koyu",light:"Açık",lang:"Dil",autoDim:"Çalarken ekranı karart",night:"Gece ekranı",wake:"Uyandırmak için dokun",done:"Zamanlayıcı bitti. İyi geceler.",rateT:"Calm Noise'u beğendin mi?",rateX:"Kısa bir puan, başkalarının uygulamayı bulmasına yardım eder.",rateY:"Puan ver",rateN:"Şimdi değil",privacy:"Her şey bu cihazda kalır. Hesap yok, takip yok. Tıbbi tavsiye değildir.",close:"Kapat",
+    s:{rain:"Yağmur",waves:"Dalgalar",stream:"Dere",thunder:"Gök gürültüsü",wind:"Rüzgâr",fire:"Ateş",fan:"Vantilatör",train:"Tren",crickets:"Cırcır böceği",white:"Beyaz gürültü",pink:"Pembe gürültü",brown:"Kahverengi gürültü"},p:["Yağmurlu gece","Sahil","Kulübede ateş","Gece treni"]},
+  id:{name:"Calm Noise",play:"Putar",pause:"Jeda",timer:"Timer tidur",off:"Mati",min:"mnt",stopsIn:"Berhenti dalam {t}",fading:"Memudar · {t}",mixTitle:"Campuranmu",hint:"Ketuk suara untuk mencampur hingga 3.",empty:"Pilih suara untuk mulai",sounds:"Suara",presets:"Coba campuran",saveMix:"Simpan",saved:"Campuran disimpan",favs:"Campuran tersimpan",noFavs:"Campuran yang kamu simpan akan muncul di sini.",maxThree:"Maksimal 3 suara — yang pertama diganti",mixName:"Beri nama campuran",cancel:"Batal",save:"Simpan",del:"Hapus",delQ:"Hapus “{n}”?",remove:"Lepas",settings:"Pengaturan",theme:"Tema",auto:"Otomatis",dark:"Gelap",light:"Terang",lang:"Bahasa",autoDim:"Redupkan layar saat memutar",night:"Layar malam",wake:"Ketuk untuk membangunkan",done:"Timer selesai. Selamat tidur.",rateT:"Suka Calm Noise?",rateX:"Rating singkat membantu orang lain menemukannya.",rateY:"Beri rating",rateN:"Nanti saja",privacy:"Semua data tetap di perangkat ini. Tanpa akun, tanpa pelacakan. Bukan saran medis.",close:"Tutup",
+    s:{rain:"Hujan",waves:"Ombak",stream:"Sungai kecil",thunder:"Guntur",wind:"Angin",fire:"Api unggun",fan:"Kipas angin",train:"Kereta",crickets:"Jangkrik",white:"Derau putih",pink:"Derau merah muda",brown:"Derau cokelat"},p:["Malam hujan","Tepi pantai","Api di pondok","Kereta malam"]}
+};
+const LANG_NAMES={en:"English",es:"Español",pt:"Português",de:"Deutsch",fr:"Français",it:"Italiano",tr:"Türkçe",id:"Bahasa Indonesia"};
+
+/* ---------- icons ---------- */
+const IC={
+  rain:"M7 15a4 4 0 0 1 .5-8 5 5 0 0 1 9.5 1.5A3.5 3.5 0 0 1 17 15H7z M8 18l-1 3 M12 18l-1 3 M16 18l-1 3",
+  waves:"M2 8c2.5 0 2.5-2 5-2s2.5 2 5 2 2.5-2 5-2 2.5 2 5 2 M2 13c2.5 0 2.5-2 5-2s2.5 2 5 2 2.5-2 5-2 2.5 2 5 2 M2 18c2.5 0 2.5-2 5-2s2.5 2 5 2 2.5-2 5-2 2.5 2 5 2",
+  stream:"M6 3c4 3-2 6 2 9s-2 6 2 9 M14 3c4 3-2 6 2 9s-2 6 2 9",
+  thunder:"M7 14a4 4 0 0 1 .5-8 5 5 0 0 1 9.5 1.5A3.5 3.5 0 0 1 17 14 M13 11l-3 5h4l-3 5",
+  wind:"M3 8h11a3 3 0 1 0-3-3 M3 12h16a3 3 0 1 1-3 3 M3 16h7",
+  fire:"M12 3c1 3 5 5 5 10a5 5 0 0 1-10 0c0-2.5 1.5-3.5 2-5 1 1.5 1.5 2.5 1.5 2.5S12 7 12 3z",
+  fan:"M12 12m-1.6 0a1.6 1.6 0 1 0 3.2 0a1.6 1.6 0 1 0-3.2 0 M12 10.4C11 6 13 3 15.5 4.5S14 9 13.3 11 M13.5 12.8c3.6 1.6 5 4.6 3 6.3s-4.1-2.4-4.9-4.5 M10.5 12.5c-3.7-.5-6.3-2.6-4.9-4.6s4.3.9 5.3 2.9",
+  train:"M6 3h12a2 2 0 0 1 2 2v10a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V5a2 2 0 0 1 2-2z M4 11h16 M8 14.5h.01 M16 14.5h.01 M8 18l-2 3 M16 18l2 3",
+  crickets:"M4 21c1-5 2-8 2-12 M9 21c0-4 1-6 3-9 M15 21c-1-3-1-6 1-9 M19 3v3 M17.5 4.5h3",
+  white:"M2 12h2l1.5-4 2 8 2-10 2 12 2-8 2 6 2-4 1.5 0h3",
+  pink:"M2 12c1.5-3 3-3 4.5 0s3 3 4.5 0 3-3 4.5 0 3 3 4.5 0",
+  brown:"M2 13c3-6 7-6 10 0s7 6 10 0",
+  play:"M8 5.5v13l11-6.5z", pause:"M7 5h3.5v14H7zM13.5 5H17v14h-3.5z",
+  set:"M4 7h9 M17 7h3 M4 17h3 M11 17h9 M15 5v4 M9 15v4",
+  moon:"M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z",
+  save:"M6 4h12v17l-6-4-6 4z M12 8v5 M9.5 10.5h5",
+  x:"M6 6l12 12M18 6L6 18"
+};
+const icon=(p,c)=>`<svg viewBox="0 0 24 24" class="i ${c||""}" aria-hidden="true"><path d="${p}"/></svg>`;
+
+/* ---------- sound generators (all synthesized, nothing loaded) ---------- */
+const TAU=Math.PI*2;
+const W=()=>Math.random()*2-1;
+function mk(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function pinkGen(){let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;return()=>{const w=W();b0=.99886*b0+w*.0555179;b1=.99332*b1+w*.0750759;b2=.969*b2+w*.153852;b3=.8665*b3+w*.3104856;b4=.55*b4+w*.5329522;b5=-.7616*b5-w*.016898;const o=b0+b1+b2+b3+b4+b5+b6+w*.5362;b6=w*.115926;return o*.11}}
+function brownGen(){let l=0;return()=>{l=(l+.02*W())/1.02;return l*3.5}}
+const lpK=(f,sr)=>1-Math.exp(-TAU*f/sr);
+const hpA=(f,sr)=>{const rc=1/(TAU*f);return rc/(rc+1/sr)};
+function smooth(rng,n,step){const m=Math.ceil(n/step)+2,p=new Float32Array(m);for(let k=0;k<m;k++)p[k]=rng();return i=>{const x=i/step,k=x|0,u=(1-Math.cos(Math.PI*(x-k)))/2;return p[k]*(1-u)+p[k+1]*u}}
+
+const GEN={
+  white(a){for(let i=0;i<a.length;i++)a[i]=W()},
+  pink(a){const P=pinkGen();for(let i=0;i<a.length;i++)a[i]=P()},
+  brown(a){const B=brownGen();for(let i=0;i<a.length;i++)a[i]=B()},
+  rain(a,sr){const P=pinkGen(),B=brownGen(),ha=hpA(500,sr),k=lpK(7000,sr),kb=lpK(300,sr),pr=110/sr;let x0=0,y=0,lp=0,env=0,dec=0,bl=0;
+    for(let i=0;i<a.length;i++){if(Math.random()<pr){env=.15+Math.random()**2*.85;dec=Math.exp(-1/(sr*(.002+Math.random()*.012)))}
+      const x=P()*.6+W()*env;env*=dec;y=ha*(y+x-x0);x0=x;lp+=(y-lp)*k;bl+=(B()-bl)*kb;a[i]=lp+bl*.35}},
+  waves(a,sr,ch,seed){const r=mk(seed),P=pinkGen(),B=brownGen(),per=8*sr,amps=[.8+.2*r(),.6+.3*r(),.9+.1*r()],fl=Math.exp(-.62*4.2),off=ch?Math.round(.04*per):0;let lp=0,bl=0;
+    for(let i=0;i<a.length;i++){const j=i+off,ph=(j%per)/per,w=Math.floor(j/per)%3;
+      const e=ph<.38?fl+(1-fl)*Math.sin(Math.PI/2*ph/.38)**2:Math.exp(-(ph-.38)*4.2);
+      lp+=(P()-lp)*(.015+.2*e);bl+=(B()-bl)*.05;a[i]=(bl*(.35+.65*e)*.9+lp*(.25+1.4*e))*amps[w]}},
+  fan(a,sr){const P=pinkGen(),B=brownGen(),k=lpK(1100,sr);let lp=0;
+    for(let i=0;i<a.length;i++){const t=i/sr;lp+=(P()-lp)*k;a[i]=(B()*.7+lp*.9)*(1+.07*Math.sin(TAU*16*t))+.035*Math.sin(TAU*55*t)+.015*Math.sin(TAU*110*t+1)}},
+  fire(a,sr,ch,seed){const r=mk(seed+ch),B=brownGen(),fl=smooth(r,a.length,.22*sr),k=lpK(500,sr),pr=12/sr;let bl=0,env=0,dec=0,c0=0;
+    for(let i=0;i<a.length;i++){const f=fl(i);if(Math.random()<pr*(.5+f)){env=.3+Math.random()**2*.7;dec=Math.exp(-1/(sr*(.0004+Math.random()*.0025)))}
+      const c=W()*env;env*=dec;const hc=c-c0;c0=c;bl+=(B()-bl)*k;a[i]=bl*(.55+.6*f)+hc*.9+W()*.015*f}},
+  wind(a,sr,ch,seed){const r=mk(seed+ch*7),s1=smooth(r,a.length,2.2*sr),s2=smooth(r,a.length,3.1*sr);let lo=0,bd=0;
+    for(let i=0;i<a.length;i++){const fc=220+700*s1(i),f=2*Math.sin(Math.PI*fc/sr);lo+=f*bd;const hi=W()-lo-.45*bd;bd+=f*hi;a[i]=bd*(.2+.8*s2(i)**1.5)}},
+  train(a,sr){const B=brownGen(),k=lpK(180,sr),per=1.6,cl=[[0,1],[.13,.75],[.8,.9],[.93,.65]];let bl=0;
+    for(let i=0;i<a.length;i++){const t=i/sr;bl+=(B()-bl)*k;let s=0;
+      for(let c=0;c<4;c++){let d=(t-cl[c][0])%per;if(d<0)d+=per;if(d<.18)s+=cl[c][1]*(Math.sin(TAU*68*d)*Math.exp(-d/.03)+W()*.5*Math.exp(-d/.005))}
+      a[i]=bl*2.2*(1+.12*Math.sin(TAU*t/4.8))+s*.55+W()*.012}},
+  crickets(a,sr,ch){const P=pinkGen(),k=lpK(500,sr),cr=[[4300,.9,3,ch?.45:1],[4850,1.2,4,ch?1:.45]];let lp=0;
+    for(let i=0;i<a.length;i++){const t=i/sr;lp+=(P()-lp)*k;let s=0;
+      for(let c=0;c<2;c++){const q=cr[c],d=t%q[1],pi=Math.floor(d/.032);if(pi<q[2]){const u=(d-pi*.032)/.018;if(u<1)s+=q[3]*Math.sin(Math.PI*u)*Math.sin(TAU*q[0]*t)}}
+      a[i]=lp*.5+s*.1}},
+  stream(a,sr,ch,seed){const r=mk(seed+ch),P=pinkGen(),ha=hpA(350,sr),k=lpK(5000,sr),sm=smooth(r,a.length,.6*sr),bs=[],pr=38/sr;let x0=0,y=0,lp=0;
+    for(let i=0;i<a.length;i++){const x=P();y=ha*(y+x-x0);x0=x;lp+=(y-lp)*k;
+      if(Math.random()<pr)bs.push({t:0,d:.012+Math.random()*.045,f:350+Math.random()*1100,a:.2+Math.random()*.8,p:0});
+      let v=0;for(let j=bs.length-1;j>=0;j--){const b=bs[j];b.p+=TAU*b.f*(1+1.8*b.t/b.d)/sr;v+=Math.sin(b.p)*b.a*Math.sin(Math.PI*b.t/b.d);b.t+=1/sr;if(b.t>=b.d)bs.splice(j,1)}
+      a[i]=lp*(.5+.5*sm(i))+v*.18}},
+  thunder(a,sr,ch,seed){const r=mk(seed),P=pinkGen(),B=brownGen(),ha=hpA(600,sr),k=lpK(160,sr),ev=[[3+r()*7,5+r()*3,.7+.3*r()],[17+r()*7,6+r()*3,.8+.2*r()]],fl=smooth(r,a.length,.14*sr);let x0=0,y=0,l1=0,l2=0;
+    for(let i=0;i<a.length;i++){const t=i/sr,x=P();y=ha*(y+x-x0);x0=x;l1+=(B()-l1)*k;l2+=(l1-l2)*k;let e=0;
+      for(let c=0;c<2;c++){const u=t-ev[c][0],d=ev[c][1];if(u>0&&u<d)e+=ev[c][2]*(u<.3?u/.3:Math.exp(-(u-.3)/(d/3.5)))}
+      a[i]=Math.tanh(y*.5+l2*e*(.55+.45*fl(i))*9)}}
+};
+const SL=[
+  {id:"rain",len:8,seed:11,rms:.15},{id:"waves",len:24,seed:23,rms:.15},{id:"stream",len:12,seed:37,rms:.14},
+  {id:"thunder",len:30,seed:41,rms:.14},{id:"wind",len:18,seed:53,rms:.15},{id:"fire",len:10,seed:67,rms:.15},
+  {id:"fan",len:6,seed:71,rms:.15},{id:"train",len:9.6,seed:83,rms:.15},{id:"crickets",len:7.2,seed:97,rms:.07},
+  {id:"white",len:6,seed:1,rms:.1},{id:"pink",len:6,seed:2,rms:.13},{id:"brown",len:6,seed:3,rms:.16}
+];
+const SND={};SL.forEach(d=>SND[d.id]=d);
+const PRESETS=[[["rain",.8],["thunder",.5],["brown",.3]],[["waves",.85],["wind",.3]],[["fire",.8],["rain",.4],["wind",.2]],[["train",.85],["rain",.35]]];
+const TIMERS=[0,15,30,60,90];
+const FADE=120000;
+
+/* ---------- state ---------- */
+const KEY="calmnoise.v1";
+function load(){try{return JSON.parse(localStorage.getItem(KEY)||"{}")||{}}catch(e){return{}}}
+const S={layers:[{id:"rain",v:.7}],timerMin:0,theme:"auto",lang:"",autoDim:true,favs:[],sessions:0,rated:false};
+(()=>{const d=load();for(const k in S)if(d[k]!==undefined)S[k]=d[k];})();
+const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
+function cleanLayers(arr){const seen={};return(Array.isArray(arr)?arr:[]).filter(l=>l&&SND[l.id]&&!seen[l.id]&&(seen[l.id]=1)).slice(0,3).map(l=>({id:l.id,v:clamp(isFinite(+l.v)?+l.v:.7,0,1)}))}
+S.layers=cleanLayers(S.layers);
+if(!TIMERS.includes(S.timerMin))S.timerMin=0;
+if(!Array.isArray(S.favs))S.favs=[];
+S.favs=S.favs.filter(f=>f&&typeof f.name==="string").map(f=>({id:f.id||Date.now()+Math.random(),name:f.name.slice(0,40),layers:cleanLayers(f.layers),timer:TIMERS.includes(f.timer)?f.timer:0})).filter(f=>f.layers.length);
+if(!I18N[S.lang])S.lang="";
+if(!["auto","dark","light"].includes(S.theme))S.theme="auto";
+S.sessions=+S.sessions||0;S.autoDim=S.autoDim!==false;S.rated=!!S.rated;
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+const R={playing:false,endAt:null,remain:null,lastInput:Date.now(),lastTick:Date.now(),played:0,counted:false,night:false,sheet:null,lastAd:0,lv:0,on:0,svT:0,susT:0,toastT:0,hintT:0,cf:null};
+
+/* ---------- i18n ---------- */
+const detect=()=>{const l=((navigator.languages&&navigator.languages[0])||navigator.language||"en").slice(0,2).toLowerCase();return I18N[l]?l:"en"};
+let L=S.lang||detect();
+function t(k,v){let s=I18N[L][k];if(s===undefined)s=I18N.en[k];if(v)for(const x in v)s=s.replace("{"+x+"}",v[x]);return s}
+const sn=id=>I18N[L].s[id]||I18N.en.s[id];
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const $=s=>document.querySelector(s);
+function fmt(ms){const s=Math.max(0,Math.ceil(ms/1000)),h=Math.floor(s/3600),m=Math.floor(s%3600/60),x=s%60;return(h?h+":"+String(m).padStart(2,"0"):m)+":"+String(x).padStart(2,"0")}
+
+/* ---------- audio ---------- */
+const A={ctx:null,master:null,out:null,an:null,nodes:{},buf:{},td:null};
+function ensureCtx(){
+  if(A.ctx)return true;
+  const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return false;
+  try{
+    const c=new AC();A.ctx=c;
+    A.master=c.createGain();A.master.gain.value=.9;
+    A.out=c.createGain();A.out.gain.value=0;
+    const comp=c.createDynamicsCompressor();comp.threshold.value=-10;comp.ratio.value=4;
+    A.an=c.createAnalyser();A.an.fftSize=1024;A.td=new Float32Array(A.an.fftSize);
+    A.master.connect(A.out);A.out.connect(comp);comp.connect(A.an);A.an.connect(c.destination);
+    return true;
+  }catch(e){A.ctx=null;return false}
+}
+function getBuf(id){
+  if(A.buf[id])return A.buf[id];
+  const d=SND[id],sr=A.ctx.sampleRate,N=Math.round(d.len*sr),F=Math.round(.5*sr);
+  const ch=[0,1].map(c=>{const a=new Float32Array(N+F);GEN[id](a,sr,c,d.seed);return a});
+  let pk=0,ss=0;for(const a of ch)for(let i=0;i<a.length;i++){const v=a[i];ss+=v*v;const av=v<0?-v:v;if(av>pk)pk=av}
+  const rms=Math.sqrt(ss/(2*(N+F)))||1,k=Math.min(d.rms/rms,.95/(pk||1));
+  const b=A.ctx.createBuffer(2,N,sr);
+  ch.forEach((a,c)=>{const o=b.getChannelData(c);for(let i=0;i<N;i++){let v=a[i];if(i<F){const g=i/F*Math.PI/2;v=a[N+i]*Math.cos(g)+a[i]*Math.sin(g)}o[i]=v*k}});
+  return A.buf[id]=b;
+}
+function startLayer(id,v){
+  if(!A.ctx||A.nodes[id])return;
+  try{
+    const b=getBuf(id),src=A.ctx.createBufferSource(),g=A.ctx.createGain();
+    src.buffer=b;src.loop=true;g.gain.value=0;src.connect(g);g.connect(A.master);
+    src.start(0,Math.random()*b.duration);g.gain.setTargetAtTime(v*v,A.ctx.currentTime,.2);
+    A.nodes[id]={src,g};
+  }catch(e){}
+}
+function stopLayer(id){
+  const n=A.nodes[id];if(!n)return;delete A.nodes[id];
+  const now=A.ctx.currentTime;
+  try{n.g.gain.cancelScheduledValues(now);n.g.gain.setTargetAtTime(0,now,.08);n.src.stop(now+.6)}catch(e){}
+}
+function setVol(id,v){const n=A.nodes[id];if(n&&A.ctx)n.g.gain.setTargetAtTime(v*v,A.ctx.currentTime,.05)}
+function fadeGain(){if(!R.endAt)return 1;const rem=R.endAt-Date.now();return rem>=FADE?1:Math.max(0,rem/FADE)**2}
+function applyOut(tc){if(!A.ctx)return;const g=A.out.gain,now=A.ctx.currentTime;g.cancelScheduledValues(now);g.setTargetAtTime(R.playing?fadeGain():0,now,tc)}
+
+function play(){
+  if(!S.layers.length){toast(t("empty"));return}
+  if(!ensureCtx())return;
+  clearTimeout(R.susT);
+  R.playing=true;
+  try{const p=A.ctx.resume();if(p&&p.catch)p.catch(()=>{})}catch(e){}
+  for(const id in A.nodes)if(!S.layers.some(l=>l.id===id))stopLayer(id);
+  S.layers.forEach(l=>{if(A.nodes[l.id])setVol(l.id,l.v);else startLayer(l.id,l.v)});
+  if(S.timerMin){if(R.remain==null)R.remain=S.timerMin*60000;R.endAt=Date.now()+R.remain}
+  R.lastTick=Date.now();
+  applyOut(.25);renderPlay();renderTimer();
+}
+function pause(){
+  R.playing=false;
+  if(R.endAt){R.remain=Math.max(0,R.endAt-Date.now());R.endAt=null}
+  if(A.ctx){applyOut(.08);clearTimeout(R.susT);R.susT=setTimeout(()=>{if(!R.playing&&A.ctx){try{const p=A.ctx.suspend();if(p&&p.catch)p.catch(()=>{})}catch(e){}}},600)}
+  renderPlay();renderTimer();
+}
+function countSession(){if(R.counted)return;R.counted=true;S.sessions++;save()}
+function finish(){
+  R.endAt=null;R.remain=null;pause();countSession();
+  toast(t("done"));ad("timer_end");setTimeout(maybeRate,1500);
+}
+function ad(place){const now=Date.now();if(now-R.lastAd<180000)return;R.lastAd=now;try{window.APP_AD(place)}catch(e){}}
+function maybeRate(){if(S.sessions>=3&&!S.rated&&!R.sheet&&!R.night&&!R.playing){S.rated=true;save();openSheet("rate")}}
+
+/* ---------- mix actions ---------- */
+function toggleSound(id){
+  const i=S.layers.findIndex(l=>l.id===id);
+  if(i>=0){S.layers.splice(i,1);stopLayer(id);if(!S.layers.length&&R.playing)pause()}
+  else{
+    if(S.layers.length>=3){const old=S.layers.shift();stopLayer(old.id);toast(t("maxThree"))}
+    S.layers.push({id,v:.7});
+    if(R.playing)startLayer(id,.7);else play();
+  }
+  save();renderLayers();updateGrid();
+}
+function setMix(list,timer){
+  S.layers=cleanLayers(list);
+  if(timer!==undefined&&TIMERS.includes(timer)){S.timerMin=timer;R.remain=null;R.endAt=null}
+  save();renderLayers();updateGrid();updateChips();
+  play();
+}
+function selectTimer(m){
+  S.timerMin=m;R.remain=m?m*60000:null;R.endAt=m&&R.playing?Date.now()+R.remain:null;
+  if(R.playing)applyOut(.3);
+  save();updateChips();renderTimer();
+}
+
+/* ---------- rendering ---------- */
+function applyTexts(){
+  document.documentElement.lang=L;
+  document.querySelectorAll("[data-i]").forEach(el=>el.textContent=t(el.dataset.i));
+  $("#setBtn").innerHTML=icon(IC.set);$("#setBtn").setAttribute("aria-label",t("settings"));
+  $("#nightBtn").innerHTML=icon(IC.moon);$("#nightBtn").setAttribute("aria-label",t("night"));
+  $("#saveBtn").innerHTML=icon(IC.save)+"<span>"+esc(t("saveMix"))+"</span>";
+  $("#nhint").textContent=t("wake");
+  $("#chips").innerHTML=TIMERS.map(m=>`<button class="chip" data-m="${m}">${m?m+" "+esc(t("min")):esc(t("off"))}</button>`).join("");
+  $("#grid").innerHTML=SL.map(d=>`<button class="tile" data-s="${d.id}">${icon(IC[d.id])}<span>${esc(sn(d.id))}</span></button>`).join("");
+  $("#presets").innerHTML=PRESETS.map((p,i)=>`<button class="preset" data-p="${i}"><span class="ics">${p.slice(0,2).map(x=>icon(IC[x[0]])).join("")}</span><span>${esc(I18N[L].p[i])}</span></button>`).join("");
+  $("#themeSeg").innerHTML=["auto","dark","light"].map(m=>`<button data-th="${m}">${esc(t(m))}</button>`).join("");
+  $("#langSel").innerHTML=`<option value="">${esc(t("auto"))} · ${LANG_NAMES[detect()]}</option>`+Object.keys(LANG_NAMES).map(k=>`<option value="${k}">${LANG_NAMES[k]}</option>`).join("");
+  $("#langSel").value=S.lang;
+  updateChips();updateGrid();renderLayers();renderFavs();renderPlay();renderTimer();renderSettings();
+}
+function updateChips(){document.querySelectorAll("#chips .chip").forEach(b=>b.setAttribute("aria-pressed",+b.dataset.m===S.timerMin))}
+function updateGrid(){document.querySelectorAll("#grid .tile").forEach(b=>b.setAttribute("aria-pressed",S.layers.some(l=>l.id===b.dataset.s)))}
+function renderLayers(){
+  $("#layers").innerHTML=S.layers.map(l=>`<div class="layer"><span class="li">${icon(IC[l.id])}</span><div class="lm"><div class="ln">${esc(sn(l.id))}</div><input type="range" min="0" max="100" value="${Math.round(l.v*100)}" data-v="${l.id}" style="--p:${Math.round(l.v*100)}%" aria-label="${esc(sn(l.id))}"></div><button class="x" data-rm="${l.id}" aria-label="${esc(t("remove"))} ${esc(sn(l.id))}">${icon(IC.x)}</button></div>`).join("");
+  $("#hint").textContent=S.layers.length?(S.layers.length<3?t("hint"):""):t("empty");
+  $("#hint").style.display=$("#hint").textContent?"":"none";
+  $("#status").textContent=S.layers.length?S.layers.map(l=>sn(l.id)).join(" · "):t("empty");
+}
+function renderPlay(){const b=$("#playBtn");b.innerHTML=icon(R.playing?IC.pause:IC.play,"f");b.setAttribute("aria-label",t(R.playing?"pause":"play"))}
+function timerText(){
+  if(!S.timerMin)return"";
+  const rem=R.endAt?R.endAt-Date.now():(R.remain!=null?R.remain:S.timerMin*60000);
+  return R.endAt&&rem<FADE?t("fading",{t:fmt(rem)}):t("stopsIn",{t:fmt(rem)});
+}
+function renderTimer(){const s=timerText();$("#tleft").textContent=s;if(R.night)$("#ntimer").textContent=s}
+function renderFavs(){
+  const el=$("#favs");
+  if(!S.favs.length){el.innerHTML=`<div class="empty">${esc(t("noFavs"))}</div>`;return}
+  el.innerHTML=S.favs.map(f=>`<div class="fav"><button class="fm" data-load="${f.id}"><span class="fn">${esc(f.name)}</span><span class="fs">${f.layers.map(l=>icon(IC[l.id])).join("")}${f.timer?"<span>· "+f.timer+" "+esc(t("min"))+"</span>":""}</span></button><button class="x" data-del="${f.id}" aria-label="${esc(t("del"))}">${icon(IC.x)}</button></div>`).join("");
+}
+function renderSettings(){
+  document.querySelectorAll("#themeSeg button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.th===S.theme));
+  $("#dimSw").setAttribute("aria-pressed",S.autoDim);$("#dimSw").setAttribute("aria-label",t("autoDim"));
+}
+function toast(msg){const el=$("#toast");el.textContent=msg;el.classList.add("on");clearTimeout(R.toastT);R.toastT=setTimeout(()=>el.classList.remove("on"),2600)}
+
+/* ---------- theme ---------- */
+const C={acc:"#9ad8c8",warm:"#f2c38b"};
+const mqLight=window.matchMedia?matchMedia("(prefers-color-scheme: light)"):null;
+const mqReduce=window.matchMedia?matchMedia("(prefers-reduced-motion: reduce)"):null;
+function applyTheme(){
+  const mode=S.theme==="auto"?(mqLight&&mqLight.matches?"light":"dark"):S.theme;
+  document.documentElement.dataset.theme=mode;
+  const cs=getComputedStyle(document.documentElement);
+  C.acc=cs.getPropertyValue("--acc").trim()||C.acc;C.warm=cs.getPropertyValue("--warm").trim()||C.warm;
+  const m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute("content",cs.getPropertyValue("--bg").trim());
+}
+if(mqLight){const f=()=>{if(S.theme==="auto")applyTheme()};mqLight.addEventListener?mqLight.addEventListener("change",f):mqLight.addListener&&mqLight.addListener(f)}
+function rgba(h,a){h=h.replace("#","");if(h.length===3)h=h.split("").map(c=>c+c).join("");const n=parseInt(h,16);return`rgba(${n>>16&255},${n>>8&255},${n&255},${a})`}
+
+/* ---------- sheets & night ---------- */
+function openSheet(name){
+  closeSheet();R.sheet=name;
+  $("#sh-"+name).classList.add("on");$("#back").classList.add("on");
+}
+function closeSheet(){if(!R.sheet)return;$("#sh-"+R.sheet).classList.remove("on");$("#back").classList.remove("on");R.sheet=null}
+function openNight(){
+  closeSheet();R.night=true;$("#night").classList.add("on");tickNight();
+  const h=$("#nhint");h.style.opacity=1;clearTimeout(R.hintT);R.hintT=setTimeout(()=>h.style.opacity=0,4000);
+}
+function closeNight(){if(!R.night)return;R.night=false;$("#night").classList.remove("on");R.lastInput=Date.now();if(!R.playing)setTimeout(maybeRate,400)}
+function tickNight(){
+  if(!R.night)return;
+  let s;try{s=new Date().toLocaleTimeString(L,{hour:"2-digit",minute:"2-digit"})}catch(e){const d=new Date();s=d.getHours()+":"+String(d.getMinutes()).padStart(2,"0")}
+  $("#clock").textContent=s;$("#ntimer").textContent=timerText();
+}
+
+/* ---------- breathing orb ---------- */
+const cv=$("#orb"),cx=cv.getContext("2d");let CW=0,CH=0,DPR=1;
+function sizeCv(){DPR=Math.min(2,window.devicePixelRatio||1);const r=cv.getBoundingClientRect();CW=r.width;CH=r.height;cv.width=Math.max(1,Math.round(CW*DPR));cv.height=Math.max(1,Math.round(CH*DPR))}
+function frame(ts){
+  let target=0;
+  if(R.playing&&A.an){A.an.getFloatTimeDomainData(A.td);let s=0;for(let i=0;i<A.td.length;i++)s+=A.td[i]*A.td[i];target=Math.min(1,Math.sqrt(s/A.td.length)*4.5)}
+  R.lv+=(target-R.lv)*(target>R.lv?.08:.03);
+  R.on+=((R.playing?1:0)-R.on)*.05;
+  const red=mqReduce&&mqReduce.matches,rm=red?.35:1;
+  const br=.5-.5*Math.cos(TAU*ts/(R.playing?6500:9000));
+  if(!R.night&&CW){
+    const base=Math.min(CW,CH)*.29,r=base*(.92+.06*br*rm+.16*R.lv*rm);
+    cx.setTransform(DPR,0,0,DPR,0,0);cx.clearRect(0,0,CW,CH);cx.translate(CW/2,CH/2-6);
+    if(!red&&R.on>.02){cx.lineWidth=1.5;for(let k=0;k<3;k++){const p=(ts/5200+k/3)%1;cx.strokeStyle=rgba(C.acc,(1-p)*.22*R.on);cx.beginPath();cx.arc(0,0,r*(1.05+p*.75),0,TAU);cx.stroke()}}
+    let g=cx.createRadialGradient(0,0,r*.6,0,0,r*1.6);g.addColorStop(0,rgba(C.acc,.16*(.35+.65*R.on)));g.addColorStop(1,rgba(C.acc,0));
+    cx.fillStyle=g;cx.beginPath();cx.arc(0,0,r*1.6,0,TAU);cx.fill();
+    const wob=(.012+.05*R.lv)*rm*(.3+.7*R.on);
+    cx.beginPath();
+    for(let i=0;i<=64;i++){const th=i/64*TAU,d=1+wob*(Math.sin(3*th+ts*.0007)*.5+Math.sin(5*th-ts*.0011)*.3+Math.sin(2*th+ts*.0004)*.2),x=Math.cos(th)*r*d,y=Math.sin(th)*r*d;i?cx.lineTo(x,y):cx.moveTo(x,y)}
+    cx.closePath();
+    g=cx.createRadialGradient(-r*.3,-r*.35,r*.05,0,0,r*1.05);
+    g.addColorStop(0,rgba(C.warm,.95));g.addColorStop(.65,rgba(C.acc,.85));g.addColorStop(1,rgba(C.acc,.5));
+    cx.globalAlpha=.45+.55*R.on;cx.fillStyle=g;cx.fill();cx.globalAlpha=1;
+  }else if(R.night){$("#ndot").style.transform=`scale(${.8+.3*br*rm+.5*R.lv})`}
+  requestAnimationFrame(frame);
+}
+
+/* ---------- events ---------- */
+$("#playBtn").addEventListener("click",()=>{if(R.playing){pause();maybeRate()}else play()});
+$("#nightBtn").addEventListener("click",openNight);
+$("#setBtn").addEventListener("click",()=>{renderSettings();openSheet("settings")});
+$("#saveBtn").addEventListener("click",()=>{
+  if(!S.layers.length){toast(t("empty"));return}
+  $("#mixName").value=S.layers.map(l=>sn(l.id)).join(" + ").slice(0,40);
+  openSheet("save");
+});
+$("#doSave").addEventListener("click",()=>{
+  const name=($("#mixName").value||"").trim().slice(0,40)||S.layers.map(l=>sn(l.id)).join(" + ").slice(0,40);
+  S.favs.unshift({id:Date.now(),name,layers:S.layers.map(l=>({id:l.id,v:l.v})),timer:S.timerMin});
+  S.favs=S.favs.slice(0,30);save();renderFavs();closeSheet();toast(t("saved"));ad("saved");
+});
+$("#mixName").addEventListener("keydown",e=>{if(e.key==="Enter")$("#doSave").click()});
+$("#cfYes").addEventListener("click",()=>{const f=R.cf;R.cf=null;closeSheet();if(f)f()});
+$("#rateYes").addEventListener("click",()=>{closeSheet();try{if(typeof window.APP_RATE==="function")window.APP_RATE()}catch(e){}});
+$("#back").addEventListener("click",closeSheet);
+document.querySelectorAll("[data-close]").forEach(b=>b.addEventListener("click",closeSheet));
+$("#chips").addEventListener("click",e=>{const b=e.target.closest(".chip");if(b)selectTimer(+b.dataset.m)});
+$("#grid").addEventListener("click",e=>{const b=e.target.closest(".tile");if(b)toggleSound(b.dataset.s)});
+$("#presets").addEventListener("click",e=>{const b=e.target.closest(".preset");if(b)setMix(PRESETS[+b.dataset.p].map(x=>({id:x[0],v:x[1]})))});
+$("#layers").addEventListener("click",e=>{const b=e.target.closest("[data-rm]");if(b)toggleSound(b.dataset.rm)});
+$("#layers").addEventListener("input",e=>{
+  const el=e.target;if(!el.dataset||!el.dataset.v)return;
+  const l=S.layers.find(x=>x.id===el.dataset.v);if(!l)return;
+  l.v=clamp(el.value/100,0,1);el.style.setProperty("--p",el.value+"%");setVol(l.id,l.v);
+  clearTimeout(R.svT);R.svT=setTimeout(save,300);
+});
+$("#favs").addEventListener("click",e=>{
+  const ld=e.target.closest("[data-load]"),dl=e.target.closest("[data-del]");
+  if(ld){const f=S.favs.find(x=>String(x.id)===ld.dataset.load);if(f)setMix(f.layers,f.timer)}
+  else if(dl){const f=S.favs.find(x=>String(x.id)===dl.dataset.del);if(!f)return;
+    $("#cfText").textContent=t("delQ",{n:f.name});
+    R.cf=()=>{S.favs=S.favs.filter(x=>x!==f);save();renderFavs()};openSheet("confirm")}
+});
+$("#themeSeg").addEventListener("click",e=>{const b=e.target.closest("[data-th]");if(!b)return;S.theme=b.dataset.th;save();applyTheme();renderSettings()});
+$("#langSel").addEventListener("change",e=>{S.lang=e.target.value;L=S.lang||detect();save();applyTexts()});
+$("#dimSw").addEventListener("click",()=>{S.autoDim=!S.autoDim;save();renderSettings()});
+$("#night").addEventListener("click",closeNight);
+const markInput=()=>{R.lastInput=Date.now()};
+["pointerdown","keydown","touchstart","wheel"].forEach(ev=>document.addEventListener(ev,markInput,{capture:true,passive:true}));
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape"){if(R.night)closeNight();else closeSheet()}
+  else if(e.key===" "&&!R.sheet&&e.target===document.body){e.preventDefault();$("#playBtn").click()}
+});
+window.addEventListener("resize",sizeCv);
+
+setInterval(()=>{
+  const now=Date.now();
+  if(R.playing){
+    R.played+=Math.min(5000,now-R.lastTick);
+    if(R.played>600000)countSession();
+    if(R.endAt){if(now>=R.endAt)finish();else applyOut(.4)}
+    if(S.autoDim&&!R.night&&!R.sheet&&now-R.lastInput>45000)openNight();
+  }
+  R.lastTick=now;renderTimer();tickNight();
+},500);
+
+/* ---------- start ---------- */
+applyTheme();applyTexts();sizeCv();save();
+requestAnimationFrame(frame);
+</script>
+<!--arlo-license--><div id="arlo-copyright" style="font:11px/1.4 system-ui,sans-serif;opacity:.45;text-align:center;padding:10px 8px calc(10px + env(safe-area-inset-bottom,0px));pointer-events:none;user-select:none">© 2026 Calm Noise</div><!--/arlo-license-->
+</body>
+</html>
