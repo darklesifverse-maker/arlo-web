@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en"><head>
+<script async src="https://telegram.org/js/telegram-web-app.js" onload="try{var w=Telegram.WebApp;w.ready();w.expand();document.documentElement.classList.add('in-tg')}catch(e){}"></script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#ff6b3d">
+<title>Can They Hire Me?</title>
+<style>
+:root{--bg:#0e1217;--card:#161b22;--card2:#1d232c;--text:#e8ecf1;--muted:#93a0ad;--line:#273040;--ok:#2fbf71;--bad:#ef5b5b;--warn:#f0b429;--r:14px}
+@media (prefers-color-scheme: light){:root{--bg:#f3f5f8;--card:#ffffff;--card2:#f1f4f8;--text:#131820;--muted:#5b6672;--line:#e0e5ec}}
+html.in-tg{--bg:var(--tg-theme-bg-color);--text:var(--tg-theme-text-color);--muted:var(--tg-theme-hint-color);--card:var(--tg-theme-secondary-bg-color)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+main{max-width:560px;margin:0 auto;padding:0 14px 28px}
+.top{max-width:560px;margin:0 auto;display:flex;gap:12px;align-items:center;padding:18px 14px 12px}
+.logo{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;font-size:26px;background:var(--acc);box-shadow:0 6px 18px -6px var(--acc);flex:none}
+h1{font-size:20px;margin:0;line-height:1.15;letter-spacing:-.01em}
+.sub{margin:3px 0 0;color:var(--muted);font-size:13.5px}
+h2{font-size:16px;margin:0 0 10px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px;margin:12px 0}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding:2px 0 4px;scrollbar-width:none}
+.tabs button{flex:none;border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:999px;padding:8px 14px;font:600 14px system-ui;cursor:pointer}
+.tabs button.on{background:var(--acc);border-color:var(--acc);color:#fff}
+[data-pane]{display:none}[data-pane].on{display:block}
+label{display:block;font-size:13px;color:var(--muted);margin:10px 0 5px}
+input,select,textarea{width:100%;font:16px system-ui;color:var(--text);background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:10px 11px;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--acc)}
+textarea{min-height:120px;resize:vertical}
+.row{display:flex;gap:10px}.row>*{flex:1;min-width:0}
+.btn{display:block;width:100%;margin-top:12px;border:0;border-radius:12px;padding:13px 14px;font:700 16px system-ui;background:var(--acc);color:#fff;cursor:pointer;min-height:48px}
+.btn.ghost{background:transparent;color:var(--acc);border:1.5px solid var(--acc)}
+.btn.small{display:inline-block;width:auto;padding:7px 12px;min-height:0;font-size:14px;margin:0}
+.muted{color:var(--muted)}.tiny{font-size:12.5px}
+.big{font-size:34px;font-weight:800;letter-spacing:-.02em;line-height:1.1}
+.pill{display:inline-block;padding:3px 9px;border-radius:999px;font:700 12.5px system-ui}
+.pill.ok{background:color-mix(in srgb,var(--ok) 20%,transparent);color:var(--ok)}
+.pill.bad{background:color-mix(in srgb,var(--bad) 20%,transparent);color:var(--bad)}
+.pill.warn{background:color-mix(in srgb,var(--warn) 22%,transparent);color:var(--warn)}
+ul.sig{list-style:none;padding:0;margin:8px 0 0}ul.sig li{padding:8px 0;border-top:1px solid var(--line);display:flex;gap:9px}ul.sig li:first-child{border-top:0}
+.verdict{border-left:5px solid var(--acc);padding-left:12px}
+.bar{height:10px;border-radius:6px;background:var(--card2);overflow:hidden}.bar>i{display:block;height:100%;background:var(--acc);border-radius:6px}
+.list .it{padding:11px 0;border-top:1px solid var(--line)}.list .it:first-child{border-top:0}
+pre{white-space:pre-wrap;word-break:break-word;background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:11px;font:13.5px/1.45 ui-monospace,Consolas,monospace;margin:8px 0}
+.out{white-space:pre-wrap;background:var(--card2);border-radius:10px;padding:12px;border:1px solid var(--line)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}.chip{border:1px solid var(--line);background:var(--card2);color:var(--text);border-radius:999px;padding:6px 11px;font:14px system-ui;cursor:pointer}.chip.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#111;color:#fff;padding:10px 16px;border-radius:999px;font:600 14px system-ui;opacity:0;transition:.25s;pointer-events:none;z-index:9}
+.toast.on{opacity:.95}
+.foot{max-width:560px;margin:0 auto;padding:4px 14px 40px;text-align:center}
+.foot a{color:var(--acc);text-decoration:none;font-weight:600}
+.kpi{display:grid;grid-template-columns:1fr 1fr;gap:10px}.kpi>div{background:var(--card2);border-radius:12px;padding:10px}
+.kpi b{display:block;font-size:22px}
+@media print{.top,.tabs,.foot,.btn,.noprint{display:none!important}body{background:#fff;color:#000}.card{border:0}}
+
+:root{--acc:#ff6b3d}
+</style></head>
+<body>
+<header class="top"><div class="logo">🌍</div><div><h1>Can They Hire Me?</h1><p class="sub">Paste a remote job post — see in 5 seconds if it is really open to your country.</p></div></header>
+<main>
+
+<div class="card">
+ <label>Your country</label>
+ <select id="cc"></select>
+ <label>Paste the job post</label>
+ <textarea id="post" placeholder="Paste the full job description here…"></textarea>
+ <button class="btn" id="go">Check this job</button>
+ <button class="btn ghost" id="demo">Try an example</button>
+</div>
+<div id="res"></div>
+<div class="card">
+ <h2>🔎 Want jobs that are already filtered?</h2>
+ <p class="muted">Our bot sends 3 fresh remote jobs a day that hire from your country — free.</p>
+ <button class="btn" id="bot">Get 3 jobs for my country</button>
+</div>
+</main>
+<footer class="foot"><a href="https://t.me/remote_work_playbook" data-tg="https://t.me/remote_work_playbook">📣 Worldwide Only — free daily tips in Telegram</a><p class="tiny muted">Free tool. Estimates only — always check with your provider.</p></footer>
+<script>const APP='gx-worldwide';
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const TG=()=>window.Telegram&&window.Telegram.WebApp;
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function haptic(t){try{TG().HapticFeedback.impactOccurred(t||'light')}catch(e){}}
+function toast(m){let t=$('.toast');if(!t){t=document.createElement('div');t.className='toast';document.body.appendChild(t)}t.textContent=m;t.classList.add('on');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('on'),1600)}
+async function copy(txt){try{await navigator.clipboard.writeText(txt)}catch(e){const a=document.createElement('textarea');a.value=txt;document.body.appendChild(a);a.select();try{document.execCommand('copy')}catch(_){}a.remove()}toast('Copied ✓');haptic()}
+const store={get(k,d){try{const v=localStorage.getItem('gx:'+APP+':'+k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem('gx:'+APP+':'+k,JSON.stringify(v))}catch(e){}}};
+function openUrl(u){const w=TG();try{if(w&&/^https:\/\/t\.me\//.test(u)&&w.openTelegramLink)return w.openTelegramLink(u);if(w&&w.openLink)return w.openLink(u)}catch(e){}window.open(u,'_blank')}
+document.addEventListener('click',e=>{const a=e.target.closest('[data-tg]');if(a){e.preventDefault();openUrl(a.dataset.tg)}const c=e.target.closest('[data-copy]');if(c){e.preventDefault();const src=c.dataset.copy;copy(src.startsWith('#')?($(src).value||$(src).innerText):src)}});
+function tabs(){$$('.tabs').forEach(T=>{T.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;$$('button',T).forEach(x=>x.classList.toggle('on',x===b));$$('[data-pane]').forEach(p=>p.classList.toggle('on',p.dataset.pane===b.dataset.tab));haptic()})})}
+document.addEventListener('DOMContentLoaded',tabs);
+const fmt=(n,d=0)=>Number(n||0).toLocaleString('en-US',{maximumFractionDigits:d,minimumFractionDigits:d});
+</script>
+<script>
+const C=[['IN','India',5.5],['PK','Pakistan',5],['PH','Philippines',8],['BD','Bangladesh',6],['NG','Nigeria',1],['KE','Kenya',3],['EG','Egypt',2],['ID','Indonesia',7],['VN','Vietnam',7],['LK','Sri Lanka',5.5],['NP','Nepal',5.75],['GH','Ghana',0],['XX','Other (UTC+0)',0]];
+$('#cc').innerHTML=C.map(c=>`<option value="${c[0]}">${c[1]}</option>`).join('');
+$('#cc').value=store.get('cc','IN');$('#cc').onchange=()=>store.set('cc',$('#cc').value);
+const RED=[[/\b(us|u\.s\.|usa|united states|canada|uk|u\.k\.|eu|europe|emea|latam|north america)[\s-]*(only|based|residents?)\b/i,'Location limited ("… only / based")'],
+[/\b(must|need to|required to)\s+(be\s+)?(reside|live|located|based)\s+(in|within)\b/i,'Must live in a specific country'],
+[/authori[sz]ed to work in/i,'Needs work authorization in their country'],
+[/\b(w-?2)\b/i,'W-2 = US employees only'],[/\b1099\b/,'1099 = US contractors only'],
+[/security clearance|citizens? only|citizenship required/i,'Citizenship or clearance required'],
+[/\b(within|in)\s+(the\s+)?(us|uk|eu)\b/i,'Mentions working within US/UK/EU']];
+const AMB=[[/no (visa )?sponsorship/i,'No visa sponsorship (often means local only)'],[/\b(est|edt|pst|pdt|cst|cet|cest|gmt|bst)\b.*\b(hours|time ?zone|overlap)\b|\b(hours|time ?zone|overlap)\b.*\b(est|edt|pst|pdt|cst|cet|cest|gmt|bst)\b/i,'Fixed time zone hours — check the overlap below'],[/\bhybrid|on-?site|office\b/i,'Hybrid / office mentioned']];
+const GRN=[[/\b(worldwide|anywhere in the world|work from anywhere|global(ly)? remote|any (country|location)|fully remote,? global)\b/i,'Says worldwide / anywhere'],
+[/\b(independent )?contractor|freelance|b2b contract/i,'Contractor role (easier to hire abroad)'],
+[/\b(deel|remote\.com|oyster|papaya|multiplier|rippling|wise|payoneer)\b/i,'Uses a global payroll/payment tool'],
+[/\b(apac|asia|south asia|africa|india|pakistan|philippines|bangladesh|nigeria|kenya|emerging markets)\b/i,'Mentions your region'],
+[/\b(async|asynchronous|flexible hours)\b/i,'Async / flexible hours']];
+const TZ={est:-5,edt:-4,et:-5,cst:-6,cdt:-5,pst:-8,pdt:-7,pt:-8,mst:-7,gmt:0,utc:0,bst:1,uk:0,cet:1,cest:2,aest:10};
+function hh(x){x=((x%24)+24)%24;const h=Math.floor(x),m=Math.round((x-h)*60);return String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')}
+function check(){const t=$('#post').value.trim();const cc=C.find(c=>c[0]===$('#cc').value);if(t.length<40){toast('Paste the whole job post');return}
+ const hit=(L)=>L.filter(([r])=>r.test(t)).map(x=>x[1]);const r=hit(RED),a=hit(AMB),g=hit(GRN);
+ const mine=new RegExp('\\b'+cc[1]+'\\b','i').test(t);let score=g.length*2-r.length*3-a.length+(mine?3:0);
+ let v,cls,txt;if(r.length&&!mine){v='Probably NOT open to you';cls='bad';txt='The post limits where you must live. Skip it and save your time.'}
+ else if(score>=3){v='Looks open to you';cls='ok';txt='Good signals. Apply fast — open-to-all jobs get many applicants in the first 24 hours.'}
+ else{v='Unclear — ask before applying';cls='warn';txt='Send one short question first: "Do you hire contractors from '+cc[1]+'?"'}
+ const z=(t.toLowerCase().match(/\b(est|edt|et|cst|cdt|pst|pdt|pt|mst|gmt|utc|bst|cet|cest|aest)\b/)||[])[1];let tz='';
+ if(z){const off=TZ[z],me=cc[2];const s=9-off+me,e=17-off+me;tz=`<div class="card"><h2>🕘 Their working day in your time</h2><p>Client 09:00–17:00 <b>${z.toUpperCase()}</b> = <b>${hh(s)}–${hh(e)}</b> in ${esc(cc[1])}.</p><p class="tiny muted">${(s%24+24)%24>=19||(s%24+24)%24<5?'This is a night shift for you. Ask if 3–4 hours of overlap is enough.':'Comfortable overlap with your day.'}</p></div>`}
+ const li=(arr,ic)=>arr.map(x=>`<li><span>${ic}</span><span>${esc(x)}</span></li>`).join('');
+ $('#res').innerHTML=`<div class="card"><div class="verdict"><span class="pill ${cls}">${v}</span><p>${txt}</p></div><ul class="sig">${li(r,'⛔')}${li(a,'⚠️')}${li(g,'✅')}${mine?li(['Mentions '+cc[1]],'✅'):''}${!r.length&&!a.length&&!g.length?'<li>No clear signals found in this post.</li>':''}</ul>
+ <button class="btn ghost small" data-copy="Hi! Quick question before I apply: do you hire independent contractors from ${esc(cc[1])}? If yes, how do you usually pay (Wise, Payoneer, Deel)? Thanks!">Copy a polite question to the client</button></div>${tz}`;haptic('medium');$('#res').scrollIntoView({behavior:'smooth'})}
+$('#go').onclick=check;
+$('#demo').onclick=()=>{$('#post').value="Senior Content Writer (Remote)\nWe are a fully remote, global team. This is an independent contractor role paid via Deel. You will work async with 3 hours overlap with EST. Candidates from anywhere are welcome, including South Asia.";check()};
+$('#bot').onclick=()=>openUrl('https://t.me/WorldwideOnlyJobsBot?start=app_'+$('#cc').value);
+</script>
+</body></html>
