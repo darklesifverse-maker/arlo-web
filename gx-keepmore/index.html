@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en"><head>
+<script async src="https://telegram.org/js/telegram-web-app.js" onload="try{var w=Telegram.WebApp;w.ready();w.expand();document.documentElement.classList.add('in-tg')}catch(e){}"></script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#16a34a">
+<title>Keep More</title>
+<style>
+:root{--bg:#0e1217;--card:#161b22;--card2:#1d232c;--text:#e8ecf1;--muted:#93a0ad;--line:#273040;--ok:#2fbf71;--bad:#ef5b5b;--warn:#f0b429;--r:14px}
+@media (prefers-color-scheme: light){:root{--bg:#f3f5f8;--card:#ffffff;--card2:#f1f4f8;--text:#131820;--muted:#5b6672;--line:#e0e5ec}}
+html.in-tg{--bg:var(--tg-theme-bg-color);--text:var(--tg-theme-text-color);--muted:var(--tg-theme-hint-color);--card:var(--tg-theme-secondary-bg-color)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+main{max-width:560px;margin:0 auto;padding:0 14px 28px}
+.top{max-width:560px;margin:0 auto;display:flex;gap:12px;align-items:center;padding:18px 14px 12px}
+.logo{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;font-size:26px;background:var(--acc);box-shadow:0 6px 18px -6px var(--acc);flex:none}
+h1{font-size:20px;margin:0;line-height:1.15;letter-spacing:-.01em}
+.sub{margin:3px 0 0;color:var(--muted);font-size:13.5px}
+h2{font-size:16px;margin:0 0 10px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px;margin:12px 0}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding:2px 0 4px;scrollbar-width:none}
+.tabs button{flex:none;border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:999px;padding:8px 14px;font:600 14px system-ui;cursor:pointer}
+.tabs button.on{background:var(--acc);border-color:var(--acc);color:#fff}
+[data-pane]{display:none}[data-pane].on{display:block}
+label{display:block;font-size:13px;color:var(--muted);margin:10px 0 5px}
+input,select,textarea{width:100%;font:16px system-ui;color:var(--text);background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:10px 11px;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--acc)}
+textarea{min-height:120px;resize:vertical}
+.row{display:flex;gap:10px}.row>*{flex:1;min-width:0}
+.btn{display:block;width:100%;margin-top:12px;border:0;border-radius:12px;padding:13px 14px;font:700 16px system-ui;background:var(--acc);color:#fff;cursor:pointer;min-height:48px}
+.btn.ghost{background:transparent;color:var(--acc);border:1.5px solid var(--acc)}
+.btn.small{display:inline-block;width:auto;padding:7px 12px;min-height:0;font-size:14px;margin:0}
+.muted{color:var(--muted)}.tiny{font-size:12.5px}
+.big{font-size:34px;font-weight:800;letter-spacing:-.02em;line-height:1.1}
+.pill{display:inline-block;padding:3px 9px;border-radius:999px;font:700 12.5px system-ui}
+.pill.ok{background:color-mix(in srgb,var(--ok) 20%,transparent);color:var(--ok)}
+.pill.bad{background:color-mix(in srgb,var(--bad) 20%,transparent);color:var(--bad)}
+.pill.warn{background:color-mix(in srgb,var(--warn) 22%,transparent);color:var(--warn)}
+ul.sig{list-style:none;padding:0;margin:8px 0 0}ul.sig li{padding:8px 0;border-top:1px solid var(--line);display:flex;gap:9px}ul.sig li:first-child{border-top:0}
+.verdict{border-left:5px solid var(--acc);padding-left:12px}
+.bar{height:10px;border-radius:6px;background:var(--card2);overflow:hidden}.bar>i{display:block;height:100%;background:var(--acc);border-radius:6px}
+.list .it{padding:11px 0;border-top:1px solid var(--line)}.list .it:first-child{border-top:0}
+pre{white-space:pre-wrap;word-break:break-word;background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:11px;font:13.5px/1.45 ui-monospace,Consolas,monospace;margin:8px 0}
+.out{white-space:pre-wrap;background:var(--card2);border-radius:10px;padding:12px;border:1px solid var(--line)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}.chip{border:1px solid var(--line);background:var(--card2);color:var(--text);border-radius:999px;padding:6px 11px;font:14px system-ui;cursor:pointer}.chip.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#111;color:#fff;padding:10px 16px;border-radius:999px;font:600 14px system-ui;opacity:0;transition:.25s;pointer-events:none;z-index:9}
+.toast.on{opacity:.95}
+.foot{max-width:560px;margin:0 auto;padding:4px 14px 40px;text-align:center}
+.foot a{color:var(--acc);text-decoration:none;font-weight:600}
+.kpi{display:grid;grid-template-columns:1fr 1fr;gap:10px}.kpi>div{background:var(--card2);border-radius:12px;padding:10px}
+.kpi b{display:block;font-size:22px}
+@media print{.top,.tabs,.foot,.btn,.noprint{display:none!important}body{background:#fff;color:#000}.card{border:0}}
+
+:root{--acc:#16a34a}
+</style></head>
+<body>
+<header class="top"><div class="logo">💸</div><div><h1>Keep More</h1><p class="sub">How much of $1,000 you really keep — Upwork, Payoneer, Wise, PayPal, bank. Plus a free invoice maker.</p></div></header>
+<main>
+
+<div class="tabs"><button class="on" data-tab="calc">💸 What I keep</button><button data-tab="inv">🧾 Invoice</button></div>
+<div data-pane="calc" class="on">
+<div class="card">
+ <div class="row"><div><label>Client pays (USD)</label><input id="amt" type="number" inputmode="decimal" value="1000"></div>
+ <div><label>Payments a month</label><input id="per" type="number" inputmode="numeric" value="2"></div></div>
+ <label>1 USD in your currency (optional)</label><div class="row"><input id="rate" type="number" inputmode="decimal" placeholder="e.g. 83.2"><input id="cur" placeholder="INR" maxlength="4"></div>
+ <p class="tiny muted">Fees below are typical starting values — tap ✎ to edit them to match your account.</p>
+</div>
+<div id="list"></div>
+</div>
+<div data-pane="inv">
+<div class="card">
+ <div class="row"><div><label>Your name / business</label><input id="iFrom" placeholder="Asha Designs"></div><div><label>Invoice #</label><input id="iNo" value="001"></div></div>
+ <label>Client</label><input id="iTo" placeholder="Bright Media LLC, USA">
+ <label>Work (one line per item: description ; qty ; price)</label>
+ <textarea id="iItems">Logo design ; 1 ; 250
+Social media kit (10 posts) ; 1 ; 180</textarea>
+ <div class="row"><div><label>Due in (days)</label><input id="iDue" type="number" value="14"></div><div><label>Late fee % / month</label><input id="iLate" type="number" value="2"></div></div>
+ <label>How to pay you</label><textarea id="iPay" style="min-height:70px">Wise / Payoneer: your@email.com</textarea>
+ <button class="btn" id="mk">Make invoice</button>
+</div>
+<div class="card" id="invOut" style="display:none"><div class="out" id="invTxt"></div><button class="btn" data-copy="#invTxt">Copy as text</button><button class="btn ghost" onclick="window.print()">Save as PDF / print</button></div>
+</div>
+</main>
+<footer class="foot"><a href="https://t.me/excel_sheets_shortcuts" data-tg="https://t.me/excel_sheets_shortcuts">📣 Get Paid Global — free daily tips in Telegram</a><p class="tiny muted">Free tool. Estimates only — always check with your provider.</p></footer>
+<script>const APP='gx-keepmore';
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const TG=()=>window.Telegram&&window.Telegram.WebApp;
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function haptic(t){try{TG().HapticFeedback.impactOccurred(t||'light')}catch(e){}}
+function toast(m){let t=$('.toast');if(!t){t=document.createElement('div');t.className='toast';document.body.appendChild(t)}t.textContent=m;t.classList.add('on');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('on'),1600)}
+async function copy(txt){try{await navigator.clipboard.writeText(txt)}catch(e){const a=document.createElement('textarea');a.value=txt;document.body.appendChild(a);a.select();try{document.execCommand('copy')}catch(_){}a.remove()}toast('Copied ✓');haptic()}
+const store={get(k,d){try{const v=localStorage.getItem('gx:'+APP+':'+k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem('gx:'+APP+':'+k,JSON.stringify(v))}catch(e){}}};
+function openUrl(u){const w=TG();try{if(w&&/^https:\/\/t\.me\//.test(u)&&w.openTelegramLink)return w.openTelegramLink(u);if(w&&w.openLink)return w.openLink(u)}catch(e){}window.open(u,'_blank')}
+document.addEventListener('click',e=>{const a=e.target.closest('[data-tg]');if(a){e.preventDefault();openUrl(a.dataset.tg)}const c=e.target.closest('[data-copy]');if(c){e.preventDefault();const src=c.dataset.copy;copy(src.startsWith('#')?($(src).value||$(src).innerText):src)}});
+function tabs(){$$('.tabs').forEach(T=>{T.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;$$('button',T).forEach(x=>x.classList.toggle('on',x===b));$$('[data-pane]').forEach(p=>p.classList.toggle('on',p.dataset.pane===b.dataset.tab));haptic()})})}
+document.addEventListener('DOMContentLoaded',tabs);
+const fmt=(n,d=0)=>Number(n||0).toLocaleString('en-US',{maximumFractionDigits:d,minimumFractionDigits:d});
+</script>
+<script>
+const DEF=[{k:'up',n:'Upwork',pf:10,fx:2,fix:2,note:'service fee + withdrawal + exchange'},{k:'fv',n:'Fiverr',pf:20,fx:2,fix:3,note:'20% fee + withdrawal + exchange'},
+{k:'pp',n:'PayPal',pf:4.4,fx:4,fix:0.3,note:'international receive + conversion'},{k:'py',n:'Payoneer',pf:1,fx:2,fix:1.5,note:'receive + withdraw to local bank'},
+{k:'ws',n:'Wise',pf:0.5,fx:0.6,fix:0.5,note:'receive + convert'},{k:'sw',n:'Bank (SWIFT)',pf:0,fx:2.5,fix:30,note:'intermediary fees + bank rate'}];
+let F=store.get('fees',DEF);if(F.length!==DEF.length)F=DEF;
+['amt','per','rate','cur'].forEach(id=>{const v=store.get(id,null);if(v!=null)$('#'+id).value=v;$('#'+id).oninput=()=>{store.set(id,$('#'+id).value);draw()}});
+function keep(f,a){return Math.max(0,a*(1-f.pf/100)*(1-f.fx/100)-f.fix)}
+function draw(){const a=+$('#amt').value||0,per=+$('#per').value||0,rate=+$('#rate').value||0,cur=($('#cur').value||'').toUpperCase();
+ const R=F.map(f=>({...f,k2:keep(f,a)})).sort((x,y)=>y.k2-x.k2),best=R[0].k2;
+ $('#list').innerHTML=R.map((f,i)=>{const lost=a-f.k2,pct=a?f.k2/a*100:0,yr=(best-f.k2)*per*12;
+ return `<div class="card"><div class="row" style="align-items:center"><div><b>${i===0?'🏆 ':''}${esc(f.n)}</b><div class="tiny muted">${esc(f.note)}</div></div><div style="text-align:right"><b style="font-size:20px">$${fmt(f.k2,2)}</b><div class="tiny muted">${rate?fmt(f.k2*rate)+' '+esc(cur):''}</div></div></div>
+ <div class="bar" style="margin-top:8px"><i style="width:${pct.toFixed(1)}%"></i></div>
+ <div class="tiny muted" style="margin-top:6px">You keep ${pct.toFixed(1)}% · fees $${fmt(lost,2)}${i>0&&yr>0?` · <b style="color:var(--bad)">$${fmt(yr)} a year more than ${esc(R[0].n)}</b>`:''} <a href="#" data-edit="${f.k}" style="color:var(--acc)">✎ edit</a></div>
+ <div class="noprint" id="ed-${f.k}" style="display:none"><div class="row"><div><label>Fee %</label><input data-f="pf" data-k="${f.k}" type="number" step="0.1" value="${f.pf}"></div><div><label>Exchange markup %</label><input data-f="fx" data-k="${f.k}" type="number" step="0.1" value="${f.fx}"></div><div><label>Fixed $</label><input data-f="fix" data-k="${f.k}" type="number" step="0.1" value="${f.fix}"></div></div></div></div>`}).join('')+
+ `<button class="btn ghost" id="rst">Reset fees to defaults</button>`;
+ $('#rst').onclick=()=>{F=DEF.map(x=>({...x}));store.set('fees',F);draw()}}
+document.addEventListener('click',e=>{const a=e.target.closest('[data-edit]');if(a){e.preventDefault();const el=$('#ed-'+a.dataset.edit);el.style.display=el.style.display==='none'?'block':'none'}});
+document.addEventListener('change',e=>{const i=e.target.closest('[data-f]');if(!i)return;const f=F.find(x=>x.k===i.dataset.k);f[i.dataset.f]=+i.value||0;store.set('fees',F);draw()});
+draw();
+['iFrom','iPay','iLate','iDue'].forEach(id=>{const v=store.get(id,null);if(v!=null)$('#'+id).value=v;$('#'+id).oninput=()=>store.set(id,$('#'+id).value)});
+$('#iNo').value=store.get('iNo','001');
+$('#mk').onclick=()=>{const it=$('#iItems').value.split('\n').map(l=>l.split(';').map(s=>s.trim())).filter(x=>x[0]);let tot=0;
+ const lines=it.map(([d,q,p])=>{q=+q||1;p=+p||0;tot+=q*p;return `${d}  ×${q}  $${fmt(q*p,2)}`});const d=new Date(),due=new Date(Date.now()+(+$('#iDue').value||14)*864e5);
+ const o=(x)=>x.toISOString().slice(0,10);
+ $('#invTxt').textContent=`INVOICE #${$('#iNo').value}\nDate: ${o(d)}   Due: ${o(due)}\n\nFrom: ${$('#iFrom').value}\nTo: ${$('#iTo').value}\n\n${lines.join('\n')}\n\nTOTAL: $${fmt(tot,2)} USD\n\nPayment terms: due within ${$('#iDue').value} days. A late fee of ${$('#iLate').value}% per month applies to overdue amounts.\n\nHow to pay:\n${$('#iPay').value}\n\nThank you for your business!`;
+ $('#invOut').style.display='block';const n=String((parseInt($('#iNo').value,10)||0)+1).padStart(3,'0');store.set('iNo',n);haptic('medium');$('#invOut').scrollIntoView({behavior:'smooth'})};
+</script>
+</body></html>
