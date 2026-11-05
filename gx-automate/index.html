@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en"><head>
+<script async src="https://telegram.org/js/telegram-web-app.js" onload="try{var w=Telegram.WebApp;w.ready();w.expand();document.documentElement.classList.add('in-tg')}catch(e){}"></script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#eab308">
+<title>Automate It</title>
+<style>
+:root{--bg:#0e1217;--card:#161b22;--card2:#1d232c;--text:#e8ecf1;--muted:#93a0ad;--line:#273040;--ok:#2fbf71;--bad:#ef5b5b;--warn:#f0b429;--r:14px}
+@media (prefers-color-scheme: light){:root{--bg:#f3f5f8;--card:#ffffff;--card2:#f1f4f8;--text:#131820;--muted:#5b6672;--line:#e0e5ec}}
+html.in-tg{--bg:var(--tg-theme-bg-color);--text:var(--tg-theme-text-color);--muted:var(--tg-theme-hint-color);--card:var(--tg-theme-secondary-bg-color)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+main{max-width:560px;margin:0 auto;padding:0 14px 28px}
+.top{max-width:560px;margin:0 auto;display:flex;gap:12px;align-items:center;padding:18px 14px 12px}
+.logo{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;font-size:26px;background:var(--acc);box-shadow:0 6px 18px -6px var(--acc);flex:none}
+h1{font-size:20px;margin:0;line-height:1.15;letter-spacing:-.01em}
+.sub{margin:3px 0 0;color:var(--muted);font-size:13.5px}
+h2{font-size:16px;margin:0 0 10px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px;margin:12px 0}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding:2px 0 4px;scrollbar-width:none}
+.tabs button{flex:none;border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:999px;padding:8px 14px;font:600 14px system-ui;cursor:pointer}
+.tabs button.on{background:var(--acc);border-color:var(--acc);color:#fff}
+[data-pane]{display:none}[data-pane].on{display:block}
+label{display:block;font-size:13px;color:var(--muted);margin:10px 0 5px}
+input,select,textarea{width:100%;font:16px system-ui;color:var(--text);background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:10px 11px;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--acc)}
+textarea{min-height:120px;resize:vertical}
+.row{display:flex;gap:10px}.row>*{flex:1;min-width:0}
+.btn{display:block;width:100%;margin-top:12px;border:0;border-radius:12px;padding:13px 14px;font:700 16px system-ui;background:var(--acc);color:#fff;cursor:pointer;min-height:48px}
+.btn.ghost{background:transparent;color:var(--acc);border:1.5px solid var(--acc)}
+.btn.small{display:inline-block;width:auto;padding:7px 12px;min-height:0;font-size:14px;margin:0}
+.muted{color:var(--muted)}.tiny{font-size:12.5px}
+.big{font-size:34px;font-weight:800;letter-spacing:-.02em;line-height:1.1}
+.pill{display:inline-block;padding:3px 9px;border-radius:999px;font:700 12.5px system-ui}
+.pill.ok{background:color-mix(in srgb,var(--ok) 20%,transparent);color:var(--ok)}
+.pill.bad{background:color-mix(in srgb,var(--bad) 20%,transparent);color:var(--bad)}
+.pill.warn{background:color-mix(in srgb,var(--warn) 22%,transparent);color:var(--warn)}
+ul.sig{list-style:none;padding:0;margin:8px 0 0}ul.sig li{padding:8px 0;border-top:1px solid var(--line);display:flex;gap:9px}ul.sig li:first-child{border-top:0}
+.verdict{border-left:5px solid var(--acc);padding-left:12px}
+.bar{height:10px;border-radius:6px;background:var(--card2);overflow:hidden}.bar>i{display:block;height:100%;background:var(--acc);border-radius:6px}
+.list .it{padding:11px 0;border-top:1px solid var(--line)}.list .it:first-child{border-top:0}
+pre{white-space:pre-wrap;word-break:break-word;background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:11px;font:13.5px/1.45 ui-monospace,Consolas,monospace;margin:8px 0}
+.out{white-space:pre-wrap;background:var(--card2);border-radius:10px;padding:12px;border:1px solid var(--line)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}.chip{border:1px solid var(--line);background:var(--card2);color:var(--text);border-radius:999px;padding:6px 11px;font:14px system-ui;cursor:pointer}.chip.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#111;color:#fff;padding:10px 16px;border-radius:999px;font:600 14px system-ui;opacity:0;transition:.25s;pointer-events:none;z-index:9}
+.toast.on{opacity:.95}
+.foot{max-width:560px;margin:0 auto;padding:4px 14px 40px;text-align:center}
+.foot a{color:var(--acc);text-decoration:none;font-weight:600}
+.kpi{display:grid;grid-template-columns:1fr 1fr;gap:10px}.kpi>div{background:var(--card2);border-radius:12px;padding:10px}
+.kpi b{display:block;font-size:22px}
+@media print{.top,.tabs,.foot,.btn,.noprint{display:none!important}body{background:#fff;color:#000}.card{border:0}}
+
+:root{--acc:#eab308}
+.rec h3{margin:0;font-size:15.5px}.rec .meta{font-size:12.5px;color:var(--muted);margin:2px 0 6px}.star{float:right;background:none;border:0;font-size:20px;cursor:pointer;color:var(--muted)}.star.on{color:#eab308}</style></head>
+<body>
+<header class="top"><div class="logo">⚡</div><div><h1>Automate It</h1><p class="sub">Copy-paste automations for freelancers: Sheets formulas, Gmail tricks, tiny scripts. Save hours a week.</p></div></header>
+<main>
+
+<div class="card"><input id="q" placeholder="Search: invoice, overdue, currency, email…"><div class="chips" id="cat" style="margin-top:10px"></div></div>
+<div id="list"></div>
+</main>
+<footer class="foot"><a href="https://t.me/python_bites_daily" data-tg="https://t.me/python_bites_daily">📣 Automate It — free daily tips in Telegram</a><p class="tiny muted">Free tool. Estimates only — always check with your provider.</p></footer>
+<script>const APP='gx-automate';
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const TG=()=>window.Telegram&&window.Telegram.WebApp;
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function haptic(t){try{TG().HapticFeedback.impactOccurred(t||'light')}catch(e){}}
+function toast(m){let t=$('.toast');if(!t){t=document.createElement('div');t.className='toast';document.body.appendChild(t)}t.textContent=m;t.classList.add('on');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('on'),1600)}
+async function copy(txt){try{await navigator.clipboard.writeText(txt)}catch(e){const a=document.createElement('textarea');a.value=txt;document.body.appendChild(a);a.select();try{document.execCommand('copy')}catch(_){}a.remove()}toast('Copied ✓');haptic()}
+const store={get(k,d){try{const v=localStorage.getItem('gx:'+APP+':'+k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem('gx:'+APP+':'+k,JSON.stringify(v))}catch(e){}}};
+function openUrl(u){const w=TG();try{if(w&&/^https:\/\/t\.me\//.test(u)&&w.openTelegramLink)return w.openTelegramLink(u);if(w&&w.openLink)return w.openLink(u)}catch(e){}window.open(u,'_blank')}
+document.addEventListener('click',e=>{const a=e.target.closest('[data-tg]');if(a){e.preventDefault();openUrl(a.dataset.tg)}const c=e.target.closest('[data-copy]');if(c){e.preventDefault();const src=c.dataset.copy;copy(src.startsWith('#')?($(src).value||$(src).innerText):src)}});
+function tabs(){$$('.tabs').forEach(T=>{T.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;$$('button',T).forEach(x=>x.classList.toggle('on',x===b));$$('[data-pane]').forEach(p=>p.classList.toggle('on',p.dataset.pane===b.dataset.tab));haptic()})})}
+document.addEventListener('DOMContentLoaded',tabs);
+const fmt=(n,d=0)=>Number(n||0).toLocaleString('en-US',{maximumFractionDigits:d,minimumFractionDigits:d});
+</script>
+<script>
+const R=[
+['Sheets','Days overdue for each invoice','2 min/day','In column E (due date in C, status in D):','=IF(D2="Paid","",MAX(0,TODAY()-C2))'],
+['Sheets','Highlight overdue invoices red','5 min/week','Format → Conditional formatting → Custom formula, range A2:E:','=AND($D2<>"Paid",$C2<TODAY())'],
+['Sheets','Live USD → your currency','10 min/week','Change INR to PKR, PHP, BDT, NGN…','=B2*GOOGLEFINANCE("CURRENCY:USDINR")'],
+['Sheets','Monthly income total','15 min/month','Dates in A, amounts in B, month start in E1:','=SUMIFS(B:B,A:A,">="&E1,A:A,"<"&EDATE(E1,1))'],
+['Sheets','Income by client (auto table)','15 min/month','Client in A, amount in B:','=QUERY(A:B,"select A, sum(B) where A is not null group by A order by sum(B) desc",1)'],
+['Sheets','Next invoice number','2 min/invoice','Numbers in column A:','="INV-"&TEXT(MAX(A:A)+1,"000")'],
+['Sheets','Hours × rate for a whole column','5 min/week','Hours in B, rate in C:','=ARRAYFORMULA(IF(B2:B="","",B2:B*C2:C))'],
+['Sheets','Clean phone numbers','10 min/list','Keeps only digits:','=REGEXREPLACE(A2,"[^0-9+]","")'],
+['Sheets','First name from full name','5 min/list','','=PROPER(INDEX(SPLIT(A2," "),1))'],
+['Sheets','Remove duplicate leads','10 min/list','','=UNIQUE(A2:C)'],
+['Sheets','Find a client\'s email fast','3 min/day','Name in E1, names in A, emails in C:','=XLOOKUP(E1,A:A,C:C,"not found")'],
+['Sheets','Count words in a text cell','2 min/task','','=IF(A2="",0,COUNTA(SPLIT(TRIM(A2)," ")))'],
+['Sheets','Deadline in client\'s time zone','5 min/day','Your time in A2, hours difference in B2 (e.g. -10.5):','=A2+B2/24'],
+['Gmail','Auto-label every client email','10 min/day','Gmail search box → Show search options → Create filter:','from:(@clientdomain.com) → Apply label "Client: Name", Never send to Spam'],
+['Gmail','Find unpaid invoice threads','5 min/week','Paste into Gmail search:','subject:(invoice) -label:paid older_than:14d'],
+['Gmail','Templates (saved replies)','20 min/week','Settings → Advanced → Templates → Enable. Then: compose → ⋮ → Templates → Save draft as template.','Hi {name},\n\nThanks for your message! I\'ll get back to you with details by {time}.\n\nBest,\n{you}'],
+['Gmail','Snooze emails to your work hours','10 min/day','Hover an email → 🕒 Snooze → pick the time your shift starts.','Tip: snooze client emails that arrive at night to 09:00 your time.'],
+['Script','Email me when an invoice is overdue','30 min/week','Extensions → Apps Script → paste → Run once → Triggers → daily:','function overdue(){const s=SpreadsheetApp.getActive().getSheetByName("Invoices");const v=s.getDataRange().getValues();const late=v.slice(1).filter(r=>r[3]!=="Paid"&&r[2]&&new Date(r[2])<new Date());if(late.length)MailApp.sendEmail(Session.getActiveUser().getEmail(),late.length+" overdue invoice(s)",late.map(r=>r[0]+" — "+r[1]).join("\\n"));}'],
+['Script','Make a PDF invoice from a Google Doc template','1 h/month','Doc with {{CLIENT}} {{TOTAL}} placeholders; template ID in the code:','function makeInvoice(client,total){const t=DriveApp.getFileById("TEMPLATE_ID").makeCopy("Invoice "+client);const d=DocumentApp.openById(t.getId());const b=d.getBody();b.replaceText("{{CLIENT}}",client);b.replaceText("{{TOTAL}}",total);d.saveAndClose();return DriveApp.getFileById(t.getId()).getAs("application/pdf");}'],
+['Script','Rename many files in a folder','30 min/task','Folder ID in the code; adds a prefix:','function rename(){const f=DriveApp.getFolderById("FOLDER_ID").getFiles();while(f.hasNext()){const x=f.next();x.setName("ClientA_"+x.getName());}}'],
+['Python','Batch-resize photos to 1080 px','1 h/week','pip install pillow · run in the photo folder:','from PIL import Image\nimport glob\nfor f in glob.glob("*.jpg"):\n    im=Image.open(f); im.thumbnail((1080,1080)); im.save("small_"+f, quality=85)'],
+['Python','Merge many CSV files into one','30 min/task','pip install pandas:','import pandas as pd, glob\npd.concat([pd.read_csv(f) for f in glob.glob("*.csv")]).to_csv("all.csv", index=False)'],
+['Python','Rename files by date','20 min/task','','import os, time\nfor f in os.listdir("."):\n    if f.endswith(".jpg"):\n        t=time.strftime("%Y-%m-%d_%H%M%S", time.localtime(os.path.getmtime(f)))\n        os.rename(f, t+".jpg")'],
+['Habit','Text shortcuts on your phone','15 min/week','iPhone: Settings → General → Keyboard → Text Replacement. Android (Gboard): Settings → Dictionary → Personal dictionary.',';inv → "Hi! Please find my invoice attached. Payment is due within 14 days. Thank you!"'],
+['Habit','One-click time tracking','1 h/month','Free: Toggl Track or Clockify. Start a timer per client — export hours to your invoice.','Rule: no timer = no invoice line. Review hours every Friday.']];
+let fav=store.get('fav',[]),cat='All';
+const cats=['All','★','Sheets','Gmail','Script','Python','Habit'];
+function drawCats(){$('#cat').innerHTML=cats.map(c=>`<button class="chip ${c===cat?'on':''}">${c}</button>`).join('')}
+$('#cat').onclick=e=>{const b=e.target.closest('.chip');if(!b)return;cat=b.textContent;drawCats();draw()};
+function draw(){const q=$('#q').value.toLowerCase();const L=R.map((r,i)=>({r,i})).filter(({r,i})=>(cat==='All'||(cat==='★'?fav.includes(i):r[0]===cat))&&(!q||r.join(' ').toLowerCase().includes(q)));
+ L.sort((a,b)=>fav.includes(b.i)-fav.includes(a.i));
+ $('#list').innerHTML=L.map(({r,i})=>`<div class="card rec"><button class="star ${fav.includes(i)?'on':''}" data-fav="${i}">★</button><h3>${esc(r[1])}</h3><div class="meta">${esc(r[0])} · saves ~${esc(r[2])}</div>${r[3]?`<div class="tiny">${esc(r[3])}</div>`:''}<pre id="c${i}">${esc(r[4])}</pre><button class="btn small" data-copy="#c${i}">Copy</button></div>`).join('')||'<p class="muted">Nothing found.</p>'}
+document.addEventListener('click',e=>{const s=e.target.closest('[data-fav]');if(!s)return;const i=+s.dataset.fav;fav=fav.includes(i)?fav.filter(x=>x!==i):[...fav,i];store.set('fav',fav);draw();haptic()});
+$('#q').oninput=draw;drawCats();draw();
+</script>
+</body></html>
