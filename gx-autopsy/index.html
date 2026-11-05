@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en"><head>
+<script async src="https://telegram.org/js/telegram-web-app.js" onload="try{var w=Telegram.WebApp;w.ready();w.expand();document.documentElement.classList.add('in-tg')}catch(e){}"></script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#14b8a6">
+<title>Idea Autopsy</title>
+<style>
+:root{--bg:#0e1217;--card:#161b22;--card2:#1d232c;--text:#e8ecf1;--muted:#93a0ad;--line:#273040;--ok:#2fbf71;--bad:#ef5b5b;--warn:#f0b429;--r:14px}
+@media (prefers-color-scheme: light){:root{--bg:#f3f5f8;--card:#ffffff;--card2:#f1f4f8;--text:#131820;--muted:#5b6672;--line:#e0e5ec}}
+html.in-tg{--bg:var(--tg-theme-bg-color);--text:var(--tg-theme-text-color);--muted:var(--tg-theme-hint-color);--card:var(--tg-theme-secondary-bg-color)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+main{max-width:560px;margin:0 auto;padding:0 14px 28px}
+.top{max-width:560px;margin:0 auto;display:flex;gap:12px;align-items:center;padding:18px 14px 12px}
+.logo{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;font-size:26px;background:var(--acc);box-shadow:0 6px 18px -6px var(--acc);flex:none}
+h1{font-size:20px;margin:0;line-height:1.15;letter-spacing:-.01em}
+.sub{margin:3px 0 0;color:var(--muted);font-size:13.5px}
+h2{font-size:16px;margin:0 0 10px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px;margin:12px 0}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding:2px 0 4px;scrollbar-width:none}
+.tabs button{flex:none;border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:999px;padding:8px 14px;font:600 14px system-ui;cursor:pointer}
+.tabs button.on{background:var(--acc);border-color:var(--acc);color:#fff}
+[data-pane]{display:none}[data-pane].on{display:block}
+label{display:block;font-size:13px;color:var(--muted);margin:10px 0 5px}
+input,select,textarea{width:100%;font:16px system-ui;color:var(--text);background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:10px 11px;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--acc)}
+textarea{min-height:120px;resize:vertical}
+.row{display:flex;gap:10px}.row>*{flex:1;min-width:0}
+.btn{display:block;width:100%;margin-top:12px;border:0;border-radius:12px;padding:13px 14px;font:700 16px system-ui;background:var(--acc);color:#fff;cursor:pointer;min-height:48px}
+.btn.ghost{background:transparent;color:var(--acc);border:1.5px solid var(--acc)}
+.btn.small{display:inline-block;width:auto;padding:7px 12px;min-height:0;font-size:14px;margin:0}
+.muted{color:var(--muted)}.tiny{font-size:12.5px}
+.big{font-size:34px;font-weight:800;letter-spacing:-.02em;line-height:1.1}
+.pill{display:inline-block;padding:3px 9px;border-radius:999px;font:700 12.5px system-ui}
+.pill.ok{background:color-mix(in srgb,var(--ok) 20%,transparent);color:var(--ok)}
+.pill.bad{background:color-mix(in srgb,var(--bad) 20%,transparent);color:var(--bad)}
+.pill.warn{background:color-mix(in srgb,var(--warn) 22%,transparent);color:var(--warn)}
+ul.sig{list-style:none;padding:0;margin:8px 0 0}ul.sig li{padding:8px 0;border-top:1px solid var(--line);display:flex;gap:9px}ul.sig li:first-child{border-top:0}
+.verdict{border-left:5px solid var(--acc);padding-left:12px}
+.bar{height:10px;border-radius:6px;background:var(--card2);overflow:hidden}.bar>i{display:block;height:100%;background:var(--acc);border-radius:6px}
+.list .it{padding:11px 0;border-top:1px solid var(--line)}.list .it:first-child{border-top:0}
+pre{white-space:pre-wrap;word-break:break-word;background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:11px;font:13.5px/1.45 ui-monospace,Consolas,monospace;margin:8px 0}
+.out{white-space:pre-wrap;background:var(--card2);border-radius:10px;padding:12px;border:1px solid var(--line)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}.chip{border:1px solid var(--line);background:var(--card2);color:var(--text);border-radius:999px;padding:6px 11px;font:14px system-ui;cursor:pointer}.chip.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#111;color:#fff;padding:10px 16px;border-radius:999px;font:600 14px system-ui;opacity:0;transition:.25s;pointer-events:none;z-index:9}
+.toast.on{opacity:.95}
+.foot{max-width:560px;margin:0 auto;padding:4px 14px 40px;text-align:center}
+.foot a{color:var(--acc);text-decoration:none;font-weight:600}
+.kpi{display:grid;grid-template-columns:1fr 1fr;gap:10px}.kpi>div{background:var(--card2);border-radius:12px;padding:10px}
+.kpi b{display:block;font-size:22px}
+@media print{.top,.tabs,.foot,.btn,.noprint{display:none!important}body{background:#fff;color:#000}.card{border:0}}
+
+:root{--acc:#14b8a6}
+.q{padding:10px 0;border-top:1px solid var(--line)}.q:first-child{border-top:0}.q p{margin:0 0 6px;font-weight:600}.opts{display:flex;gap:6px}.opts button{flex:1;border:1px solid var(--line);background:var(--card2);color:var(--text);border-radius:10px;padding:8px 4px;font:13px system-ui;cursor:pointer}.opts button.on{background:var(--acc);color:#fff;border-color:var(--acc)}</style></head>
+<body>
+<header class="top"><div class="logo">🔬</div><div><h1>Idea Autopsy</h1><p class="sub">Score your service idea in 2 minutes: see the weak spots and get a 7-day test plan.</p></div></header>
+<main>
+
+<div class="card"><label>Your idea in one line</label><input id="idea" placeholder="Monthly bookkeeping for Etsy sellers in the US"></div>
+<div class="card" id="qs"></div>
+<div class="card" id="res"></div>
+</main>
+<footer class="foot"><a href="https://t.me/science_in_a_minute" data-tg="https://t.me/science_in_a_minute">📣 Idea Autopsy — free daily tips in Telegram</a><p class="tiny muted">Free tool. Estimates only — always check with your provider.</p></footer>
+<script>const APP='gx-autopsy';
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const TG=()=>window.Telegram&&window.Telegram.WebApp;
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function haptic(t){try{TG().HapticFeedback.impactOccurred(t||'light')}catch(e){}}
+function toast(m){let t=$('.toast');if(!t){t=document.createElement('div');t.className='toast';document.body.appendChild(t)}t.textContent=m;t.classList.add('on');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('on'),1600)}
+async function copy(txt){try{await navigator.clipboard.writeText(txt)}catch(e){const a=document.createElement('textarea');a.value=txt;document.body.appendChild(a);a.select();try{document.execCommand('copy')}catch(_){}a.remove()}toast('Copied ✓');haptic()}
+const store={get(k,d){try{const v=localStorage.getItem('gx:'+APP+':'+k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem('gx:'+APP+':'+k,JSON.stringify(v))}catch(e){}}};
+function openUrl(u){const w=TG();try{if(w&&/^https:\/\/t\.me\//.test(u)&&w.openTelegramLink)return w.openTelegramLink(u);if(w&&w.openLink)return w.openLink(u)}catch(e){}window.open(u,'_blank')}
+document.addEventListener('click',e=>{const a=e.target.closest('[data-tg]');if(a){e.preventDefault();openUrl(a.dataset.tg)}const c=e.target.closest('[data-copy]');if(c){e.preventDefault();const src=c.dataset.copy;copy(src.startsWith('#')?($(src).value||$(src).innerText):src)}});
+function tabs(){$$('.tabs').forEach(T=>{T.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;$$('button',T).forEach(x=>x.classList.toggle('on',x===b));$$('[data-pane]').forEach(p=>p.classList.toggle('on',p.dataset.pane===b.dataset.tab));haptic()})})}
+document.addEventListener('DOMContentLoaded',tabs);
+const fmt=(n,d=0)=>Number(n||0).toLocaleString('en-US',{maximumFractionDigits:d,minimumFractionDigits:d});
+</script>
+<script>
+const Q=[['Can you name exactly who pays (job + place)?','Write it as "X in Y who Z". Vague buyers = no buyers.'],
+['How often do they feel the problem?','Pick a problem that hurts weekly, not yearly.'],
+['Do they already pay for something to fix it?','If nobody pays today, education costs more than selling.'],
+['Can you deliver the first result in 7 days?','Shrink the offer to one small result you can deliver this week.'],
+['Can you reach 50 of them this week?','Find the groups, forums or directories where they already are.'],
+['Is your price under 10% of what it saves or earns them?','Show the value in money: "saves 6 hours = $120".'],
+['Are there few good competitors, or a clear gap?','Find the 1-star reviews of competitors — that is your gap.'],
+['Do you have proof (sample, result, review)?','Make one free sample for a real person and ask for a quote.'],
+['Can the same client buy again every month?','Turn the one-off into a monthly version.'],
+['Can you do it without daily calls in their time zone?','Use async: Loom videos, forms, templates.']];
+const A=[['No',0],['Partly',1],['Yes',2]];let ans=store.get('a',Array(Q.length).fill(-1));
+$('#idea').value=store.get('idea','');$('#idea').oninput=()=>{store.set('idea',$('#idea').value);res()};
+function qs(){$('#qs').innerHTML='<h2>10 honest questions</h2>'+Q.map((q,i)=>`<div class="q"><p>${i+1}. ${esc(q[0])}</p><div class="opts">${A.map(a=>`<button class="${ans[i]===a[1]?'on':''}" data-q="${i}" data-v="${a[1]}">${a[0]}</button>`).join('')}</div></div>`).join('')}
+$('#qs').onclick=e=>{const b=e.target.closest('[data-q]');if(!b)return;ans[+b.dataset.q]=+b.dataset.v;store.set('a',ans);qs();res();haptic()};
+function res(){const done=ans.filter(x=>x>=0).length;if(done<Q.length){$('#res').innerHTML=`<p class="muted">Answer all questions to see the score (${done}/10).</p>`;return}
+ const sc=Math.round(ans.reduce((a,b)=>a+b,0)/20*100);const v=sc>=70?['Test it now','ok']:sc>=45?['Fix 3 things, then test','warn']:['Kill or reshape it','bad'];
+ const weak=ans.map((a,i)=>({a,i})).sort((x,y)=>x.a-y.a).slice(0,3);const idea=$('#idea').value||'your idea';
+ const plan=`7-DAY TEST — ${idea}\nDay 1: Write the offer in one sentence + price. Make a 1-page description.\nDay 2: List 50 potential buyers (groups, directories, LinkedIn).\nDay 3: Send 20 short personal messages. No links, just a question.\nDay 4: Send 30 more. Note every answer word for word.\nDay 5: Offer 3 people a paid pilot at a launch price.\nDay 6: Deliver to anyone who paid. Ask for a one-line review.\nDay 7: Count: replies, calls, payments. ≥1 payment = continue. 0 = change buyer or offer.`;
+ $('#res').innerHTML=`<div class="verdict"><div class="big">${sc}/100</div><span class="pill ${v[1]}">${v[0]}</span></div><div class="bar" style="margin:10px 0"><i style="width:${sc}%"></i></div>
+ <h2>Weakest spots</h2><ul class="sig">${weak.map(w=>`<li>⚠️ <span><b>${esc(Q[w.i][0])}</b><br><span class="muted">${esc(Q[w.i][1])}</span></span></li>`).join('')}</ul>
+ <h2 style="margin-top:12px">Your 7-day test</h2><div class="out" id="pl">${esc(plan)}</div><button class="btn" data-copy="#pl">Copy the plan</button><button class="btn ghost" id="rs">Start over</button>`;
+ $('#rs').onclick=()=>{ans=Array(Q.length).fill(-1);store.set('a',ans);qs();res()}}
+qs();res();
+</script>
+</body></html>
