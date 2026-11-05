@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en"><head>
+<script async src="https://telegram.org/js/telegram-web-app.js" onload="try{var w=Telegram.WebApp;w.ready();w.expand();document.documentElement.classList.add('in-tg')}catch(e){}"></script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#8b5cf6">
+<title>Night Shift Planner</title>
+<style>
+:root{--bg:#0e1217;--card:#161b22;--card2:#1d232c;--text:#e8ecf1;--muted:#93a0ad;--line:#273040;--ok:#2fbf71;--bad:#ef5b5b;--warn:#f0b429;--r:14px}
+@media (prefers-color-scheme: light){:root{--bg:#f3f5f8;--card:#ffffff;--card2:#f1f4f8;--text:#131820;--muted:#5b6672;--line:#e0e5ec}}
+html.in-tg{--bg:var(--tg-theme-bg-color);--text:var(--tg-theme-text-color);--muted:var(--tg-theme-hint-color);--card:var(--tg-theme-secondary-bg-color)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+main{max-width:560px;margin:0 auto;padding:0 14px 28px}
+.top{max-width:560px;margin:0 auto;display:flex;gap:12px;align-items:center;padding:18px 14px 12px}
+.logo{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;font-size:26px;background:var(--acc);box-shadow:0 6px 18px -6px var(--acc);flex:none}
+h1{font-size:20px;margin:0;line-height:1.15;letter-spacing:-.01em}
+.sub{margin:3px 0 0;color:var(--muted);font-size:13.5px}
+h2{font-size:16px;margin:0 0 10px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px;margin:12px 0}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding:2px 0 4px;scrollbar-width:none}
+.tabs button{flex:none;border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:999px;padding:8px 14px;font:600 14px system-ui;cursor:pointer}
+.tabs button.on{background:var(--acc);border-color:var(--acc);color:#fff}
+[data-pane]{display:none}[data-pane].on{display:block}
+label{display:block;font-size:13px;color:var(--muted);margin:10px 0 5px}
+input,select,textarea{width:100%;font:16px system-ui;color:var(--text);background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:10px 11px;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--acc)}
+textarea{min-height:120px;resize:vertical}
+.row{display:flex;gap:10px}.row>*{flex:1;min-width:0}
+.btn{display:block;width:100%;margin-top:12px;border:0;border-radius:12px;padding:13px 14px;font:700 16px system-ui;background:var(--acc);color:#fff;cursor:pointer;min-height:48px}
+.btn.ghost{background:transparent;color:var(--acc);border:1.5px solid var(--acc)}
+.btn.small{display:inline-block;width:auto;padding:7px 12px;min-height:0;font-size:14px;margin:0}
+.muted{color:var(--muted)}.tiny{font-size:12.5px}
+.big{font-size:34px;font-weight:800;letter-spacing:-.02em;line-height:1.1}
+.pill{display:inline-block;padding:3px 9px;border-radius:999px;font:700 12.5px system-ui}
+.pill.ok{background:color-mix(in srgb,var(--ok) 20%,transparent);color:var(--ok)}
+.pill.bad{background:color-mix(in srgb,var(--bad) 20%,transparent);color:var(--bad)}
+.pill.warn{background:color-mix(in srgb,var(--warn) 22%,transparent);color:var(--warn)}
+ul.sig{list-style:none;padding:0;margin:8px 0 0}ul.sig li{padding:8px 0;border-top:1px solid var(--line);display:flex;gap:9px}ul.sig li:first-child{border-top:0}
+.verdict{border-left:5px solid var(--acc);padding-left:12px}
+.bar{height:10px;border-radius:6px;background:var(--card2);overflow:hidden}.bar>i{display:block;height:100%;background:var(--acc);border-radius:6px}
+.list .it{padding:11px 0;border-top:1px solid var(--line)}.list .it:first-child{border-top:0}
+pre{white-space:pre-wrap;word-break:break-word;background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:11px;font:13.5px/1.45 ui-monospace,Consolas,monospace;margin:8px 0}
+.out{white-space:pre-wrap;background:var(--card2);border-radius:10px;padding:12px;border:1px solid var(--line)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}.chip{border:1px solid var(--line);background:var(--card2);color:var(--text);border-radius:999px;padding:6px 11px;font:14px system-ui;cursor:pointer}.chip.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#111;color:#fff;padding:10px 16px;border-radius:999px;font:600 14px system-ui;opacity:0;transition:.25s;pointer-events:none;z-index:9}
+.toast.on{opacity:.95}
+.foot{max-width:560px;margin:0 auto;padding:4px 14px 40px;text-align:center}
+.foot a{color:var(--acc);text-decoration:none;font-weight:600}
+.kpi{display:grid;grid-template-columns:1fr 1fr;gap:10px}.kpi>div{background:var(--card2);border-radius:12px;padding:10px}
+.kpi b{display:block;font-size:22px}
+@media print{.top,.tabs,.foot,.btn,.noprint{display:none!important}body{background:#fff;color:#000}.card{border:0}}
+
+:root{--acc:#8b5cf6}
+.tl{position:relative;height:46px;border-radius:10px;background:var(--card2);overflow:hidden;margin-top:6px}.tl i{position:absolute;top:0;bottom:0;display:block}.tlab{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:3px}.lg{display:flex;gap:12px;flex-wrap:wrap;font-size:12.5px;margin-top:8px}.lg span:before{content:"";display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;background:var(--c)}</style></head>
+<body>
+<header class="top"><div class="logo">🌙</div><div><h1>Night Shift Planner</h1><p class="sub">Work US or EU hours from Asia or Africa without wrecking your sleep. Your shift, sleep, meals — planned.</p></div></header>
+<main>
+
+<div class="card">
+ <div class="row"><div><label>You are in</label><select id="me"></select></div><div><label>Client is in</label><select id="cl"></select></div></div>
+ <div class="row"><div><label>Client day starts</label><input id="cs" type="number" value="9" min="0" max="23"></div><div><label>Client day ends</label><input id="ce" type="number" value="17" min="1" max="24"></div></div>
+ <label>Hours you must overlap</label><input id="ov" type="range" min="2" max="8" value="4"><div class="tiny muted" id="ovl"></div>
+</div>
+<div class="card" id="plan"></div>
+</main>
+<footer class="foot"><a href="https://t.me/notion_productivity_daily" data-tg="https://t.me/notion_productivity_daily">📣 Night Shift Club — free daily tips in Telegram</a><p class="tiny muted">Free tool. Estimates only — always check with your provider.</p></footer>
+<script>const APP='gx-nightshift';
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const TG=()=>window.Telegram&&window.Telegram.WebApp;
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function haptic(t){try{TG().HapticFeedback.impactOccurred(t||'light')}catch(e){}}
+function toast(m){let t=$('.toast');if(!t){t=document.createElement('div');t.className='toast';document.body.appendChild(t)}t.textContent=m;t.classList.add('on');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('on'),1600)}
+async function copy(txt){try{await navigator.clipboard.writeText(txt)}catch(e){const a=document.createElement('textarea');a.value=txt;document.body.appendChild(a);a.select();try{document.execCommand('copy')}catch(_){}a.remove()}toast('Copied ✓');haptic()}
+const store={get(k,d){try{const v=localStorage.getItem('gx:'+APP+':'+k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem('gx:'+APP+':'+k,JSON.stringify(v))}catch(e){}}};
+function openUrl(u){const w=TG();try{if(w&&/^https:\/\/t\.me\//.test(u)&&w.openTelegramLink)return w.openTelegramLink(u);if(w&&w.openLink)return w.openLink(u)}catch(e){}window.open(u,'_blank')}
+document.addEventListener('click',e=>{const a=e.target.closest('[data-tg]');if(a){e.preventDefault();openUrl(a.dataset.tg)}const c=e.target.closest('[data-copy]');if(c){e.preventDefault();const src=c.dataset.copy;copy(src.startsWith('#')?($(src).value||$(src).innerText):src)}});
+function tabs(){$$('.tabs').forEach(T=>{T.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;$$('button',T).forEach(x=>x.classList.toggle('on',x===b));$$('[data-pane]').forEach(p=>p.classList.toggle('on',p.dataset.pane===b.dataset.tab));haptic()})})}
+document.addEventListener('DOMContentLoaded',tabs);
+const fmt=(n,d=0)=>Number(n||0).toLocaleString('en-US',{maximumFractionDigits:d,minimumFractionDigits:d});
+</script>
+<script>
+const ME=[['India',5.5],['Pakistan',5],['Philippines',8],['Bangladesh',6],['Nigeria',1],['Kenya',3],['Egypt',2],['Indonesia (Jakarta)',7],['Vietnam',7],['Sri Lanka',5.5]];
+const CL=[['US East (New York)',-5],['US Central (Chicago)',-6],['US West (Los Angeles)',-8],['UK (London)',0],['EU (Berlin, Paris)',1],['Australia East (Sydney)',10],['UAE (Dubai)',4]];
+$('#me').innerHTML=ME.map((x,i)=>`<option value="${i}">${x[0]}</option>`).join('');$('#cl').innerHTML=CL.map((x,i)=>`<option value="${i}">${x[0]}</option>`).join('');
+const S=store.get('s',{me:0,cl:0,cs:9,ce:17,ov:4});['me','cl','cs','ce','ov'].forEach(k=>{$('#'+k).value=S[k];$('#'+k).oninput=()=>{S[k]=$('#'+k).value;store.set('s',S);draw()}});
+const H=x=>((x%24)+24)%24,hh=x=>{x=H(x);const h=Math.floor(x),m=Math.round((x-h)*60);return String(h).padStart(2,'0')+':'+String(m%60).padStart(2,'0')};
+function seg(a,b,c){a=H(a);b=H(b);if(b<=a)return seg(a,24,c)+seg(0,b,c);return `<i style="left:${a/24*100}%;width:${(b-a)/24*100}%;background:${c}"></i>`}
+function draw(){const me=ME[S.me][1],cl=CL[S.cl][1],ov=+S.ov;$('#ovl').textContent=ov+' hours overlap';
+ const cs=+S.cs-cl+me,ce=+S.ce-cl+me;const sStart=cs,sEnd=cs+ov;
+ const sleep0=sEnd+1.5,sleep1=sleep0+7.5,wake=sleep1;const meal1=wake+0.5,meal2=sStart-1,snack=sStart+ov/2,caff=sleep0-6,sun=wake+0.25;
+ const night=H(sStart)>=19||H(sStart)<5;
+ $('#plan').innerHTML=`<h2>Your day</h2><p>Client ${esc(CL[S.cl][0])} ${hh(+S.cs)}–${hh(+S.ce)} = <b>${hh(cs)}–${hh(ce)}</b> your time.</p>
+ <p>Suggested shift (${ov} h overlap): <b>${hh(sStart)}–${hh(sEnd)}</b> ${night?'<span class="pill warn">night shift</span>':'<span class="pill ok">day-friendly</span>'}</p>
+ <div class="tl">${seg(sleep0,sleep1,'#3b3f8f')}${seg(sStart,sEnd,'var(--acc)')}</div><div class="tlab"><span>00</span><span>06</span><span>12</span><span>18</span><span>24</span></div>
+ <div class="lg"><span style="--c:#3b3f8f">Sleep</span><span style="--c:var(--acc)">Work</span></div>
+ <ul class="sig" style="margin-top:12px">
+ <li>😴 <span><b>Sleep ${hh(sleep0)}–${hh(sleep1)}</b> · 7.5 h, same time every day (weekends within 2 h)</span></li>
+ <li>☀️ <span><b>${hh(sun)}</b> · 15–20 min of daylight right after waking</span></li>
+ <li>🍳 <span><b>${hh(meal1)}</b> main meal · <b>${hh(meal2)}</b> light meal before work · <b>${hh(snack)}</b> small snack</span></li>
+ <li>☕ <span>Last coffee/tea by <b>${hh(caff)}</b> (6 h before sleep)</span></li>
+ <li>🕶 <span>Dim screens and lights after <b>${hh(sEnd)}</b>; dark, cool room for sleep</span></li></ul>
+ <button class="btn" id="cp">Copy my plan</button><p class="tiny muted">General wellness tips, not medical advice.</p>`;
+ $('#cp').onclick=()=>copy(`My night-shift plan\nWork: ${hh(sStart)}–${hh(sEnd)}\nSleep: ${hh(sleep0)}–${hh(sleep1)}\nDaylight: ${hh(sun)}\nMeals: ${hh(meal1)}, ${hh(meal2)}, snack ${hh(snack)}\nLast caffeine: ${hh(caff)}`)}
+draw();
+</script>
+</body></html>
