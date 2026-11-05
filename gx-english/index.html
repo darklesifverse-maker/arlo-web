@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en"><head>
+<script async src="https://telegram.org/js/telegram-web-app.js" onload="try{var w=Telegram.WebApp;w.ready();w.expand();document.documentElement.classList.add('in-tg')}catch(e){}"></script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#6366f1">
+<title>Client Message Builder</title>
+<style>
+:root{--bg:#0e1217;--card:#161b22;--card2:#1d232c;--text:#e8ecf1;--muted:#93a0ad;--line:#273040;--ok:#2fbf71;--bad:#ef5b5b;--warn:#f0b429;--r:14px}
+@media (prefers-color-scheme: light){:root{--bg:#f3f5f8;--card:#ffffff;--card2:#f1f4f8;--text:#131820;--muted:#5b6672;--line:#e0e5ec}}
+html.in-tg{--bg:var(--tg-theme-bg-color);--text:var(--tg-theme-text-color);--muted:var(--tg-theme-hint-color);--card:var(--tg-theme-secondary-bg-color)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+main{max-width:560px;margin:0 auto;padding:0 14px 28px}
+.top{max-width:560px;margin:0 auto;display:flex;gap:12px;align-items:center;padding:18px 14px 12px}
+.logo{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;font-size:26px;background:var(--acc);box-shadow:0 6px 18px -6px var(--acc);flex:none}
+h1{font-size:20px;margin:0;line-height:1.15;letter-spacing:-.01em}
+.sub{margin:3px 0 0;color:var(--muted);font-size:13.5px}
+h2{font-size:16px;margin:0 0 10px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px;margin:12px 0}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding:2px 0 4px;scrollbar-width:none}
+.tabs button{flex:none;border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:999px;padding:8px 14px;font:600 14px system-ui;cursor:pointer}
+.tabs button.on{background:var(--acc);border-color:var(--acc);color:#fff}
+[data-pane]{display:none}[data-pane].on{display:block}
+label{display:block;font-size:13px;color:var(--muted);margin:10px 0 5px}
+input,select,textarea{width:100%;font:16px system-ui;color:var(--text);background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:10px 11px;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--acc)}
+textarea{min-height:120px;resize:vertical}
+.row{display:flex;gap:10px}.row>*{flex:1;min-width:0}
+.btn{display:block;width:100%;margin-top:12px;border:0;border-radius:12px;padding:13px 14px;font:700 16px system-ui;background:var(--acc);color:#fff;cursor:pointer;min-height:48px}
+.btn.ghost{background:transparent;color:var(--acc);border:1.5px solid var(--acc)}
+.btn.small{display:inline-block;width:auto;padding:7px 12px;min-height:0;font-size:14px;margin:0}
+.muted{color:var(--muted)}.tiny{font-size:12.5px}
+.big{font-size:34px;font-weight:800;letter-spacing:-.02em;line-height:1.1}
+.pill{display:inline-block;padding:3px 9px;border-radius:999px;font:700 12.5px system-ui}
+.pill.ok{background:color-mix(in srgb,var(--ok) 20%,transparent);color:var(--ok)}
+.pill.bad{background:color-mix(in srgb,var(--bad) 20%,transparent);color:var(--bad)}
+.pill.warn{background:color-mix(in srgb,var(--warn) 22%,transparent);color:var(--warn)}
+ul.sig{list-style:none;padding:0;margin:8px 0 0}ul.sig li{padding:8px 0;border-top:1px solid var(--line);display:flex;gap:9px}ul.sig li:first-child{border-top:0}
+.verdict{border-left:5px solid var(--acc);padding-left:12px}
+.bar{height:10px;border-radius:6px;background:var(--card2);overflow:hidden}.bar>i{display:block;height:100%;background:var(--acc);border-radius:6px}
+.list .it{padding:11px 0;border-top:1px solid var(--line)}.list .it:first-child{border-top:0}
+pre{white-space:pre-wrap;word-break:break-word;background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:11px;font:13.5px/1.45 ui-monospace,Consolas,monospace;margin:8px 0}
+.out{white-space:pre-wrap;background:var(--card2);border-radius:10px;padding:12px;border:1px solid var(--line)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}.chip{border:1px solid var(--line);background:var(--card2);color:var(--text);border-radius:999px;padding:6px 11px;font:14px system-ui;cursor:pointer}.chip.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#111;color:#fff;padding:10px 16px;border-radius:999px;font:600 14px system-ui;opacity:0;transition:.25s;pointer-events:none;z-index:9}
+.toast.on{opacity:.95}
+.foot{max-width:560px;margin:0 auto;padding:4px 14px 40px;text-align:center}
+.foot a{color:var(--acc);text-decoration:none;font-weight:600}
+.kpi{display:grid;grid-template-columns:1fr 1fr;gap:10px}.kpi>div{background:var(--card2);border-radius:12px;padding:10px}
+.kpi b{display:block;font-size:22px}
+@media print{.top,.tabs,.foot,.btn,.noprint{display:none!important}body{background:#fff;color:#000}.card{border:0}}
+
+:root{--acc:#6366f1}
+</style></head>
+<body>
+<header class="top"><div class="logo">✉️</div><div><h1>Client Message Builder</h1><p class="sub">Ready English messages for clients — ask for payment, delay, extra work, follow-up. Sounds natural.</p></div></header>
+<main>
+
+<div class="tabs"><button class="on" data-tab="msg">✉️ Messages</button><button data-tab="chk">🔍 Sounds native?</button></div>
+<div data-pane="msg" class="on">
+<div class="card"><label>Situation</label><div class="chips" id="sit"></div>
+<label>Tone</label><div class="chips" id="tone"></div>
+<div class="row"><div><label>Client name</label><input id="nm" placeholder="Sarah"></div><div><label>Project</label><input id="pj" placeholder="the website redesign"></div></div>
+<div class="row"><div><label>Amount</label><input id="am" placeholder="$450"></div><div><label>Date</label><input id="dt" placeholder="Friday"></div></div></div>
+<div class="card"><div class="out" id="out"></div><button class="btn" data-copy="#out">Copy message</button></div>
+</div>
+<div data-pane="chk">
+<div class="card"><label>Paste your message</label><textarea id="txt" placeholder="Kindly do the needful and revert back at the earliest."></textarea><button class="btn" id="ck">Check</button></div>
+<div id="ckRes"></div>
+<div class="card"><h2>Top phrases to replace</h2><div class="list" id="ph"></div></div>
+</div>
+</main>
+<footer class="foot"><a href="https://t.me/english_phrases_daily1" data-tg="https://t.me/english_phrases_daily1">📣 Native or Not? — free daily tips in Telegram</a><p class="tiny muted">Free tool. Estimates only — always check with your provider.</p></footer>
+<script>const APP='gx-english';
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const TG=()=>window.Telegram&&window.Telegram.WebApp;
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function haptic(t){try{TG().HapticFeedback.impactOccurred(t||'light')}catch(e){}}
+function toast(m){let t=$('.toast');if(!t){t=document.createElement('div');t.className='toast';document.body.appendChild(t)}t.textContent=m;t.classList.add('on');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('on'),1600)}
+async function copy(txt){try{await navigator.clipboard.writeText(txt)}catch(e){const a=document.createElement('textarea');a.value=txt;document.body.appendChild(a);a.select();try{document.execCommand('copy')}catch(_){}a.remove()}toast('Copied ✓');haptic()}
+const store={get(k,d){try{const v=localStorage.getItem('gx:'+APP+':'+k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem('gx:'+APP+':'+k,JSON.stringify(v))}catch(e){}}};
+function openUrl(u){const w=TG();try{if(w&&/^https:\/\/t\.me\//.test(u)&&w.openTelegramLink)return w.openTelegramLink(u);if(w&&w.openLink)return w.openLink(u)}catch(e){}window.open(u,'_blank')}
+document.addEventListener('click',e=>{const a=e.target.closest('[data-tg]');if(a){e.preventDefault();openUrl(a.dataset.tg)}const c=e.target.closest('[data-copy]');if(c){e.preventDefault();const src=c.dataset.copy;copy(src.startsWith('#')?($(src).value||$(src).innerText):src)}});
+function tabs(){$$('.tabs').forEach(T=>{T.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;$$('button',T).forEach(x=>x.classList.toggle('on',x===b));$$('[data-pane]').forEach(p=>p.classList.toggle('on',p.dataset.pane===b.dataset.tab));haptic()})})}
+document.addEventListener('DOMContentLoaded',tabs);
+const fmt=(n,d=0)=>Number(n||0).toLocaleString('en-US',{maximumFractionDigits:d,minimumFractionDigits:d});
+</script>
+<script>
+const S={pay:'Ask for payment',late:'Payment is late',delay:'Need more time',scope:'Extra work request',quote:'Send a price',follow:'No reply follow-up',no:'Say no politely',review:'Ask for a review',first:'First message (job post)'};
+const T={f:'Friendly',n:'Neutral',x:'Firm'};
+const M={
+pay:{f:'Hi {n}! 🙂 I\'ve finished {p} — so happy with how it turned out. Here\'s the invoice for {a}. Could you send the payment by {d}? Thanks so much!',n:'Hi {n},\n\n{p} is complete. Please find attached the invoice for {a}, due on {d}.\n\nLet me know if you need anything else.\n\nBest regards',x:'Hi {n},\n\n{p} has been delivered. The invoice for {a} is due on {d}. Please confirm when the payment is sent.\n\nThank you'},
+late:{f:'Hi {n}, hope you\'re well! Just a friendly reminder that the invoice for {p} ({a}) was due on {d}. Could you check when it can be sent? Thanks a lot!',n:'Hi {n},\n\nI wanted to follow up on the invoice for {p} ({a}), which was due on {d}. Could you let me know when I can expect the payment?\n\nThank you',x:'Hi {n},\n\nThe invoice for {p} ({a}) is now overdue (due {d}). Please arrange the payment within 3 business days. As agreed in our terms, a late fee applies after that.\n\nThank you for sorting this out'},
+delay:{f:'Hi {n}! Quick update on {p}: I want to get one part really right, so I need a little more time. Would {d} work for you? Everything else is on track. 🙏',n:'Hi {n},\n\nA quick update on {p}: to deliver the quality we agreed on, I need until {d}. Everything else is on track. Please let me know if this works for you.\n\nBest regards',x:'Hi {n},\n\n{p} will be delivered on {d} instead of the original date. Here is what is already done and what is left. I will send a progress update in 2 days.\n\nThank you for understanding'},
+scope:{f:'Hi {n}! Happy to help with that too 🙂 It\'s outside what we agreed for {p}, so it would be {a} extra and ready by {d}. Want me to go ahead?',n:'Hi {n},\n\nThanks for the new request. It isn\'t part of the original scope for {p}, so I can add it for {a}, delivered by {d}. Shall I proceed?\n\nBest regards',x:'Hi {n},\n\nThis request is outside the agreed scope of {p}. I can do it as a separate task: {a}, delivery {d}. I will start once you confirm.\n\nThank you'},
+quote:{f:'Hi {n}! Thanks for thinking of me 🙂 For {p} my price is {a}, and I can deliver by {d}. Happy to jump on a quick call if you have questions!',n:'Hi {n},\n\nThank you for the details. For {p}, my price is {a}, with delivery by {d}. This includes two rounds of revisions.\n\nLooking forward to working with you',x:'Hi {n},\n\nQuote for {p}: {a}. Delivery: {d}. 50% upfront, 50% on delivery. This offer is valid for 7 days.\n\nBest regards'},
+follow:{f:'Hi {n}! Just bubbling this up in case it got lost 🙂 Any thoughts on {p}?',n:'Hi {n},\n\nI\'m following up on my last message about {p}. Do you have any updates?\n\nBest regards',x:'Hi {n},\n\nI haven\'t heard back about {p}. If I don\'t get a reply by {d}, I\'ll assume the project is on hold and free up my schedule.\n\nThank you'},
+no:{f:'Hi {n}, thank you so much for asking! I can\'t take on {p} right now, but I\'d love to help next time. 🙏',n:'Hi {n},\n\nThank you for the offer. Unfortunately, I can\'t take on {p} at the moment. I hope we can work together in the future.\n\nBest regards',x:'Hi {n},\n\nThanks for reaching out. {p} isn\'t a good fit for me, so I\'ll pass on this one.\n\nAll the best'},
+review:{f:'Hi {n}! It was a real pleasure working on {p} 🙂 If you were happy with the result, would you mind leaving a short review? It helps me a lot!',n:'Hi {n},\n\nThank you for the great collaboration on {p}. If you were satisfied, I would really appreciate a short review.\n\nBest regards',x:'Hi {n},\n\nNow that {p} is complete, could you please leave a review of my work? It takes about one minute.\n\nThank you'},
+first:{f:'Hi {n}! I read your post about {p} and I\'d love to help. I\'ve done something very similar recently — happy to share it. When would be a good time to talk?',n:'Hi {n},\n\nI read your post about {p}. I have done similar work and can start immediately. Here is a short example of my work: [link]\n\nWould you like to discuss the details?\n\nBest regards',x:'Hi {n},\n\nRe: {p}. I can deliver this by {d} for {a}. Example of similar work: [link]. Ready to start today.\n\nBest regards'}};
+let st=store.get('st',{s:'pay',t:'n'});
+function chips(el,obj,key){$(el).innerHTML=Object.entries(obj).map(([k,v])=>`<button class="chip ${st[key]===k?'on':''}" data-k="${k}">${v}</button>`).join('');$(el).onclick=e=>{const b=e.target.closest('.chip');if(!b)return;st[key]=b.dataset.k;store.set('st',st);chips(el,obj,key);gen();haptic()}}
+function gen(){const v=(id,d)=>$('#'+id).value.trim()||d;let m=M[st.s][st.t];m=m.replace(/\{n\}/g,v('nm','there')).replace(/\{p\}/g,v('pj','the project')).replace(/\{a\}/g,v('am','the agreed amount')).replace(/\{d\}/g,v('dt','Friday'));$('#out').textContent=m}
+chips('#sit',S,'s');chips('#tone',T,'t');['nm','pj','am','dt'].forEach(id=>$('#'+id).oninput=gen);gen();
+const P=[['kindly do the needful','could you please take care of this'],['please revert','please reply'],['revert back','reply'],['do the needful','take care of it'],['prepone','move earlier'],['today itself','today'],['out of station','away / traveling'],['i am having','I have'],['years of experience in','years of experience with'],['discuss about','discuss'],['request you to','please'],['at the earliest','as soon as possible'],['i will update you','I\'ll keep you posted'],['the same','it'],['pass out','graduate'],['do one thing','here\'s an idea'],['what is your good name','what\'s your name'],['updation','update'],['co-brother','brother-in-law'],['i am interested to','I\'m interested in'],['tell me the price','what\'s your budget'],['cheap price','low price'],['please find the attached','please find attached'],['waiting for your kind reply','looking forward to hearing from you'],['sir/madam','Hi [name]'],['dear sir','Hi [name]'],['as per','according to'],['send me the money','please send the payment'],['no problem sir','no problem'],['i didn\'t got','I didn\'t get']];
+$('#ph').innerHTML=P.slice(0,14).map(([a,b])=>`<div class="it"><span class="pill bad">✗</span> ${esc(a)}<br><span class="pill ok">✓</span> <b>${esc(b)}</b></div>`).join('');
+$('#ck').onclick=()=>{const t=$('#txt').value,low=t.toLowerCase();const f=P.filter(([a])=>low.includes(a));
+ let fixed=t;f.forEach(([a,b])=>{fixed=fixed.replace(new RegExp(a.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'ig'),b)});
+ $('#ckRes').innerHTML=`<div class="card">${f.length?`<span class="pill warn">${f.length} phrase(s) to fix</span><ul class="sig">${f.map(([a,b])=>`<li>✗ ${esc(a)} → <b>${esc(b)}</b></li>`).join('')}</ul><label>Better version</label><div class="out" id="fx">${esc(fixed)}</div><button class="btn" data-copy="#fx">Copy better version</button>`:'<span class="pill ok">Sounds natural ✓</span><p class="muted">No common non-native phrases found.</p>'}</div>`;haptic('medium')};
+</script>
+</body></html>
